@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | BRB Studios Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__logo" src="../AdminImages/brb-logo.png" alt="BRB Studios">
+      <p class="sidebar__role">Administrator</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Admin navigation">
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link nav-link--active" href="dashboard.html" aria-current="page">
+            <span class="nav-link__icon nav-link__icon--dashboard" aria-hidden="true"></span>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="payments.html">
+            <span class="nav-link__icon nav-link__icon--payments" aria-hidden="true"></span>
+            Payments
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="bookings.html">
+            <span class="nav-link__icon nav-link__icon--bookings" aria-hidden="true"></span>
+            Bookings
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="calendar.html">
+            <span class="nav-link__icon nav-link__icon--calendar" aria-hidden="true"></span>
+            Calendar
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="services.html">
+            <span class="nav-link__icon nav-link__icon--services" aria-hidden="true"></span>
+            Services
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="clients.html">
+            <span class="nav-link__icon nav-link__icon--clients" aria-hidden="true"></span>
+            Clients
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="vouchers.html">
+            <span class="nav-link__icon nav-link__icon--vouchers" aria-hidden="true"></span>
+            Vouchers
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reschedule-requests.html">
+            <span class="nav-link__icon nav-link__icon--reschedule" aria-hidden="true"></span>
+            Rescheduling Requests
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reports.html">
+            <span class="nav-link__icon nav-link__icon--reports" aria-hidden="true"></span>
+            Reports
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a class="sidebar__new-booking" href="new-booking.html">New Booking</a>
+      <a class="sidebar__logout" href="../../customer/html/login.html">
+        <span class="sidebar__logout-icon" aria-hidden="true"></span>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="page-header">
+      <p class="page-header__eyebrow">Dashboard</p>
+      <h1 class="page-header__title">Overview</h1>
+    </header>
+
+    <section class="overview" aria-label="Studio summary">
+      <article class="panel stat-card">
+        <h2 class="stat-card__label">Total Bookings</h2>
+        <p class="stat-card__value" data-stat="totalBookings">&ndash;</p>
+      </article>
+
+      <article class="panel stat-card">
+        <h2 class="stat-card__label">Waiting for Review</h2>
+        <p class="stat-card__value" data-stat="waitingForReview">&ndash;</p>
+      </article>
+
+      <article class="panel stat-card">
+        <h2 class="stat-card__label">Total Clients</h2>
+        <p class="stat-card__value" data-stat="totalClients">&ndash;</p>
+      </article>
+
+      <article class="panel stat-card">
+        <h2 class="stat-card__label">Payments to Collect</h2>
+        <p class="stat-card__value" data-stat="paymentsToCollect">&ndash;</p>
+      </article>
+
+      <article class="panel upcoming">
+        <h2 class="upcoming__title">Upcoming Bookings</h2>
+        <ul class="upcoming__list" id="upcomingList"></ul>
+        <p class="status-message" id="upcomingStatus" hidden></p>
+      </article>
+    </section>
+
+    <section class="day-schedule" aria-labelledby="scheduleTitle">
+      <header class="day-schedule__header">
+        <h2 class="day-schedule__title" id="scheduleTitle">
+          Day Schedule - <time id="scheduleDate"></time>
+        </h2>
+
+        <div class="day-nav">
+          <button class="day-nav__step" type="button" id="previousDay" aria-label="Previous day">&lt;</button>
+          <button class="day-nav__today" type="button" id="goToToday">Today</button>
+          <button class="day-nav__step" type="button" id="nextDay" aria-label="Next day">&gt;</button>
+        </div>
+      </header>
+
+      <div class="panel schedule" id="schedule" hidden>
+        <div class="schedule__corner"></div>
+        <div class="schedule__services" id="scheduleServices"></div>
+        <ol class="schedule__hours" id="scheduleHours"></ol>
+        <div class="schedule__columns" id="scheduleColumns"></div>
+      </div>
+      <p class="status-message" id="scheduleStatus" role="status" hidden></p>
+    </section>
+  </main>
+
+  <template id="upcomingItemTemplate">
+    <li class="upcoming-item">
+      <div class="upcoming-item__date">
+        <span class="upcoming-item__month"></span>
+        <span class="upcoming-item__day"></span>
+      </div>
+      <div>
+        <p class="upcoming-item__service"></p>
+        <p class="upcoming-item__client"></p>
+      </div>
+    </li>
+  </template>
+
+  <template id="scheduleEventTemplate">
+    <article class="schedule-event">
+      <p class="schedule-event__time"></p>
+      <p class="schedule-event__service"></p>
+      <p class="schedule-event__client"></p>
+    </article>
+  </template>
+
+  <script type="module" src="../js/dashboard.js"></script>
+</body>
+</html>

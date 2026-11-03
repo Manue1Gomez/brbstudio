@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Layout: page shell and pieces shared by every admin page.
+   ========================================================================== */
+
+.admin-layout {
+  min-height: 100vh;
+}
+
+.admin-main {
+  margin-left: var(--sidebar-width);
+  padding: 1.75rem var(--page-padding) 2rem;
+}
+
+.page-header {
+  margin-bottom: 1.25rem;
+}
+
+.page-header__eyebrow {
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-dark);
+}
+
+.page-header__title {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+/* Bordered white box used for cards and tables */
+.panel {
+  background: var(--color-surface);
+  border: var(--border-panel);
+  border-radius: var(--radius-sm);
+}
+
+.status-message {
+  padding: 0.75rem 0;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
