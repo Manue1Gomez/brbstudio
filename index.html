@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BRB Studios | Look your best. Be remembered.</title>
+  <meta name="description" content="Hair and make-up, modeling, photography and events booking in Calaca, Batangas.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo" aria-label="BRB Studios home">
+      <span class="logo-img" role="img" aria-label="BRB Studios"></span>
+    </a>
+    <button class="hamburger" aria-label="Toggle menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="login">Login</a>
+      <a href="register.html" class="btn btn-grey btn-sm">Register</a>
+      <a href="#calendar" class="btn btn-red btn-sm">Book</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Hair and make up, modeling, photography, and events booking</p>
+        <h1 class="display">Look your best.<br>Be remembered.</h1>
+        <p>BRB Studios brings styling, photography, pageant styling and event planning together so every moment is camera ready</p>
+        <div class="hero-actions">
+          <a href="#calendar" class="btn btn-red">Book a Service</a>
+          <a href="#services" class="btn btn-outline">Explore Services</a>
+        </div>
+      </div>
+      <div class="hero-photos" aria-hidden="true">
+        <div class="photo-slice"></div>
+        <div class="photo-slice"></div>
+        <div class="photo-slice"></div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" id="services">
+      <div class="section-head">
+        <p class="eyebrow">What we offer</p>
+        <h2 class="display">Our Services</h2>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="card-img hair-makeup" role="img" aria-label="Hair and Makeup"></div>
+          <div class="card-body">
+            <h3>Hair &amp; Makeup</h3>
+            <p>Polished hair and makeup for your moment in the spotlight.</p>
+            <button class="btn btn-grey btn-sm" data-service="Hair & Makeup">Book this service</button>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-img photography" role="img" aria-label="Photography"></div>
+          <div class="card-body">
+            <h3>Photography</h3>
+            <p>Portrait, event and editorial sessions with professional retouching.</p>
+            <button class="btn btn-grey btn-sm" data-service="Photography">Book this service</button>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-img modeling" role="img" aria-label="Modeling Workshop"></div>
+          <div class="card-body">
+            <h3>Modeling Workshop</h3>
+            <p>Hands-on posing, walking and confidence sessions for new talent.</p>
+            <button class="btn btn-grey btn-sm" data-service="Modeling Workshop">Book this service</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Calendar -->
+    <section class="calendar-section" id="calendar">
+      <h2 class="display">Check The Calendar</h2>
+      <div class="calendar-wrap">
+        <div class="panel">
+          <div class="cal-head">
+            <button class="cal-nav" id="calPrev" aria-label="Previous month">&#8249;</button>
+            <h3 id="calTitle">November 2026</h3>
+            <button class="cal-nav" id="calNext" aria-label="Next month">&#8250;</button>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="panel day-panel">
+          <h3 id="selectedDate">21 November 2026</h3>
+          <div class="slots" id="slots"></div>
+          <a href="#" class="btn btn-red" id="bookDate">Book on this date</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

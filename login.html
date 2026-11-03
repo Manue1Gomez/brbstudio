@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | BRB Studios</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="login-page">
+    <div class="login-left">
+      <a href="index.html" class="logo" aria-label="BRB Studios home">
+        <span class="logo-img" role="img" aria-label="BRB Studios"></span>
+      </a>
+      <div class="hero-photos" aria-hidden="true">
+        <div class="photo-slice"></div>
+        <div class="photo-slice"></div>
+        <div class="photo-slice"></div>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <h1 class="display">Welcome Back!</h1>
+      <p class="sub">Sign in to manage your bookings.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input id="email" name="email" type="email" placeholder="juandelacruz67@gmail.com" autocomplete="email">
+          <p class="error-msg"></p>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="pw-wrap">
+            <input id="password" name="password" type="password" placeholder="***********" autocomplete="current-password">
+            <button type="button" class="pw-toggle" aria-label="Show password">&#128065;</button>
+          </div>
+          <p class="error-msg"></p>
+        </div>
+        <p class="form-msg" id="formMsg" role="status"></p>
+        <button type="submit" class="btn btn-red">Login</button>
+      </form>
+
+      <p class="switch">No account yet? <a href="register.html"><strong style="color:var(--red-dark)">Register</strong></a></p>
+      <a href="index.html" class="back-home">back to home</a>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
