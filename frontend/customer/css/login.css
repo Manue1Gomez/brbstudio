@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Login page: storefront showcase on the left, sign-in form on the right.
+   ========================================================================== */
+
+.login {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
+  max-width: 80rem;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 2rem clamp(1.5rem, 5vw, 5rem);
+}
+
+/* ---- Left: logo and storefront photos --------------------------------- */
+
+.login__showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.login__logo {
+  width: 13.5rem;
+}
+
+.login__gallery {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.login__photo {
+  width: 9rem;
+  height: 18.5rem;
+  object-fit: cover;
+  border: 2px solid var(--color-ink-soft);
+}
+
+/* ---- Right: sign-in panel --------------------------------------------- */
+
+.login__panel {
+  width: 100%;
+  max-width: 25rem;
+  justify-self: center;
+  text-align: center;
+}
+
+.login__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4.5vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.login__subtitle {
+  margin: 0.15rem 0 1.5rem;
+  font-size: 1.0625rem;
+}
+
+.login__alert {
+  max-width: 18rem;
+  margin: 0 auto 1rem;
+}
+
+.login__form {
+  max-width: 18rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.login__submit {
+  margin-top: 0.6rem;
+}
+
+.login__register {
+  margin-top: 0.9rem;
+}
+
+.login__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+  font-style: italic;
+}
+
+.login__back::before,
+.login__back::after {
+  width: 3.25rem;
+  content: '';
+  border-top: 2px solid var(--color-ink);
+}
+
+.login__back:hover {
+  color: var(--color-brand-dark);
+}
+
+@media (max-width: 56rem) {
+  .login {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .login__gallery {
+    display: none;
+  }
+
+  .login__logo {
+    width: 10rem;
+  }
+}

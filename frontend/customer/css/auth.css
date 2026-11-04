@@ -1,0 +1,146 @@
+/* ==========================================================================
+   Auth components shared by the Login and Register pages:
+   form fields, password toggle, buttons and alerts.
+   ========================================================================== */
+
+.auth-page {
+  min-height: 100vh;
+}
+
+.auth-form {
+  display: grid;
+  gap: 1.1rem;
+}
+
+/* ---- Fields ----------------------------------------------------------- */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-field__label {
+  font-size: 0.9375rem;
+}
+
+.form-field__input {
+  width: 100%;
+  height: 2.4rem;
+  padding: 0 0.75rem;
+  font-size: 0.9375rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+}
+
+.form-field__input::placeholder {
+  font-style: italic;
+  color: var(--color-placeholder);
+}
+
+.form-field__input:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+}
+
+.form-field--invalid .form-field__input {
+  border-color: var(--color-brand-dark);
+}
+
+.form-field__error {
+  font-size: 0.8125rem;
+  color: var(--color-brand-dark);
+}
+
+/* ---- Password field with show/hide eye ------------------------------- */
+
+.password-input {
+  position: relative;
+}
+
+.password-input .form-field__input {
+  padding-right: 2.6rem;
+}
+
+.password-input__toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  transform: translateY(-50%);
+}
+
+.password-input__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  background-color: var(--color-ink);
+  -webkit-mask: url('../CustomerImages/icons/eye.svg') center / contain no-repeat;
+  mask: url('../CustomerImages/icons/eye.svg') center / contain no-repeat;
+}
+
+.password-input__toggle.is-visible .password-input__icon {
+  -webkit-mask-image: url('../CustomerImages/icons/eye-off.svg');
+  mask-image: url('../CustomerImages/icons/eye-off.svg');
+}
+
+/* ---- Buttons and links ------------------------------------------------ */
+
+.btn-primary {
+  min-width: 13.3rem;
+  height: 2.5rem;
+  padding: 0 2rem;
+  font-size: 0.9375rem;
+  color: #fff;
+  background: var(--color-brand);
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-brand-hover);
+}
+
+.btn-primary:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.btn-primary--block {
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.auth-link {
+  font-weight: 700;
+  color: var(--color-brand-dark);
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Alerts ----------------------------------------------------------- */
+
+.form-alert {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+  text-align: left;
+  border: 1px solid;
+  border-radius: var(--radius-md);
+}
+
+.form-alert--error {
+  color: #8f1d1f;
+  background: #fdecec;
+  border-color: #f2b8b8;
+}
+
+.form-alert--success {
+  color: #1f5a1c;
+  background: #e8f6e6;
+  border-color: #b8e0b2;
+}
