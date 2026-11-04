@@ -1,0 +1,79 @@
+/* ==========================================================================
+   Customer base: design tokens, reset and global typography.
+   ========================================================================== */
+
+:root {
+  --color-ink: #1d1d1f;
+  --color-ink-soft: #4a4a4a;
+  --color-muted: #6b6b70;
+  --color-surface: #ffffff;
+  --color-brand: #d03c3b;
+  --color-brand-hover: #b83231;
+  --color-brand-dark: #b8262a;
+  --color-placeholder: #c1c1c6;
+
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}

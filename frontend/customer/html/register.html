@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | BRB Studios</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+
+  <link rel="stylesheet" href="../css/customer-base.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/register.css">
+</head>
+<body class="auth-page auth-page--register">
+
+  <main class="register">
+    <img class="register__logo" src="../CustomerImages/brb-logo.png" alt="BRB Studios">
+    <h1 class="register__title">Create your account</h1>
+
+    <p class="form-alert form-alert--error" id="formError" role="alert" hidden></p>
+
+    <form class="auth-form register__form" id="registerForm" novalidate>
+      <div class="register__row">
+        <div class="form-field">
+          <label class="form-field__label" for="firstName">First Name</label>
+          <input class="form-field__input" id="firstName" name="firstName" type="text"
+                 placeholder="Juan" autocomplete="given-name" maxlength="50" required>
+          <p class="form-field__error" hidden></p>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="lastName">Last Name</label>
+          <input class="form-field__input" id="lastName" name="lastName" type="text"
+                 placeholder="Dela Cruz" autocomplete="family-name" maxlength="50" required>
+          <p class="form-field__error" hidden></p>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="email">Email Address</label>
+        <input class="form-field__input" id="email" name="email" type="email"
+               placeholder="juandelacruz67@gmail.com" autocomplete="email" maxlength="100" required>
+        <p class="form-field__error" hidden></p>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="contactNumber">Contact Number</label>
+        <input class="form-field__input" id="contactNumber" name="contactNumber" type="tel"
+               placeholder="09XXXXXXXXX" autocomplete="tel" inputmode="numeric" maxlength="11" required>
+        <p class="form-field__error" hidden></p>
+      </div>
+
+      <div class="register__row">
+        <div class="form-field">
+          <label class="form-field__label" for="password">Password</label>
+          <input class="form-field__input" id="password" name="password" type="password"
+                 placeholder="***********" autocomplete="new-password" maxlength="72" required>
+          <p class="form-field__error" hidden></p>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="confirmPassword">Confirm Password</label>
+          <input class="form-field__input" id="confirmPassword" name="confirmPassword" type="password"
+                 placeholder="***********" autocomplete="new-password" maxlength="72" required>
+          <p class="form-field__error" hidden></p>
+        </div>
+      </div>
+
+      <button class="btn-primary register__submit" type="submit">Create Account</button>
+    </form>
+
+    <p class="register__footer">
+      Already have an account? <a class="auth-link" href="login.html">Login</a>
+    </p>
+  </main>
+
+  <script type="module" src="../js/register.js"></script>
+</body>
+</html>

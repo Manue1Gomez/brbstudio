@@ -27,9 +27,9 @@ async function findUpcoming(statuses, limit) {
             DATE_FORMAT(b.Event_date, '%Y-%m-%d') AS eventDate,
             b.Time_Slot AS timeSlot,
             s.Service_Name AS serviceName,
-            CONCAT(c.Fname, ' ', c.Lname) AS clientName
+            CONCAT(c.f_name, ' ', c.l_name) AS clientName
        FROM booking b
-       JOIN customer c ON c.Customer_ID = b.Customer_ID
+       JOIN customer c ON c.customer_id = b.Customer_ID
        JOIN service s ON s.Service_ID = b.Service_ID
       WHERE b.Event_date >= CURDATE()
         AND b.Status IN (?)
@@ -47,9 +47,9 @@ async function findByDate(date, statuses) {
             b.Time_Slot AS timeSlot,
             b.Status AS status,
             s.Service_Name AS serviceName,
-            CONCAT(c.Fname, ' ', c.Lname) AS clientName
+            CONCAT(c.f_name, ' ', c.l_name) AS clientName
        FROM booking b
-       JOIN customer c ON c.Customer_ID = b.Customer_ID
+       JOIN customer c ON c.customer_id = b.Customer_ID
        JOIN service s ON s.Service_ID = b.Service_ID
       WHERE DATE(b.Event_date) = ?
         AND b.Status IN (?)`,
