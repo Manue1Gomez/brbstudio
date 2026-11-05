@@ -1,0 +1,190 @@
+/* ==========================================================================
+   Services page: catalog grid of service cards and the image uploader.
+   ========================================================================== */
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* ---- Card ------------------------------------------------------------- */
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.service-card__media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 7;
+  background: #f1f1f3;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.service-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-card__placeholder {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-inactive);
+  -webkit-mask: url('../AdminImages/icons/image.svg') center / contain no-repeat;
+  mask: url('../AdminImages/icons/image.svg') center / contain no-repeat;
+}
+
+.service-card__body {
+  flex: 1;
+  padding: 1.1rem 1.1rem 0.9rem 1.4rem;
+}
+
+.service-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.service-card__name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.service-card__status {
+  flex-shrink: 0;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-top: 0.3rem;
+  background: var(--color-active);
+  border-radius: 50%;
+}
+
+.service-card__description {
+  display: -webkit-box;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  font-size: 1rem;
+  line-height: 1.25;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.service-card__price-label {
+  margin-top: 0.9rem;
+  font-size: 0.9375rem;
+  text-transform: uppercase;
+}
+
+.service-card__price {
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.service-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 1rem;
+  padding: 0.75rem 0 1rem;
+  border-top: 1px solid var(--color-line-strong);
+}
+
+.service-card__footer .btn {
+  padding: 0 0.55rem;
+}
+
+/* Narrow cards: drop the button icons so Remove and Edit stay on one line */
+@container (max-width: 18rem) {
+  .service-card__footer .btn__icon {
+    display: none;
+  }
+}
+
+.service-card__footer .switch {
+  margin-right: auto;
+}
+
+/* An inactive service stays visible to the admin, but looks switched off */
+.service-card--inactive .service-card__status {
+  background: var(--color-inactive);
+}
+
+.service-card--inactive .service-card__image {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.service-card--inactive .service-card__name,
+.service-card--inactive .service-card__description,
+.service-card--inactive .service-card__price {
+  color: var(--color-muted);
+}
+
+/* ---- Add / edit dialog: image uploader -------------------------------- */
+
+.image-field__preview {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 6;
+  max-height: 8.5rem;
+  overflow: hidden;
+  background: #f1f1f3;
+  border: 1px dashed var(--color-line-strong);
+  border-radius: var(--radius-sm);
+}
+
+.image-field__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-field__placeholder {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-inactive);
+  -webkit-mask: url('../AdminImages/icons/image.svg') center / contain no-repeat;
+  mask: url('../AdminImages/icons/image.svg') center / contain no-repeat;
+}
+
+.image-field__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* The real file input is hidden; its label is styled as a button */
+.image-field__input:focus-visible + .image-field__actions .btn,
+.image-field:focus-within .image-field__choose {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.service-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+/* ---- Responsive ------------------------------------------------------- */
+
+@media (max-width: 68.75rem) {
+  .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 45rem) {
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+}

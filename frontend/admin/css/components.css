@@ -1,0 +1,268 @@
+/* ==========================================================================
+   Components: buttons, switch, form fields, dialog, alert and toast.
+   Shared by admin pages that manage records (Services, Vouchers, ...).
+   ========================================================================== */
+
+/* ---- Buttons ---------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 2.1rem;
+  padding: 0 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: var(--color-surface);
+  border: 1px solid var(--color-ink-soft);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: #f3f3f5;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn--primary {
+  color: #fff;
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--color-brand-dark);
+}
+
+.btn--danger {
+  border-color: var(--color-danger-border);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: #fdf0ef;
+}
+
+.btn--danger-solid {
+  color: #fff;
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.btn--danger-solid:hover:not(:disabled) {
+  background: #c62f2b;
+}
+
+.btn--lg {
+  height: 2.4rem;
+  padding: 0 1.4rem;
+  font-size: 0.9375rem;
+}
+
+/* Icons are SVG masks so they take the color of the text or an explicit one */
+.btn__icon {
+  flex-shrink: 0;
+  width: 0.9rem;
+  height: 0.9rem;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+.btn__icon--trash { --icon: url('../AdminImages/icons/trash.svg'); color: var(--color-danger); }
+.btn__icon--edit  { --icon: url('../AdminImages/icons/edit.svg'); }
+
+/* ---- Switch (active / inactive toggle) -------------------------------- */
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.switch__track {
+  position: relative;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 1.05rem;
+  background: var(--color-inactive);
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+
+.switch__track::after {
+  position: absolute;
+  top: 0.15rem;
+  left: 0.15rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  content: '';
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.switch__input:checked + .switch__track {
+  background: var(--color-active);
+}
+
+.switch__input:checked + .switch__track::after {
+  transform: translateX(0.95rem);
+}
+
+.switch__input:focus-visible + .switch__track {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.switch__input:disabled + .switch__track {
+  opacity: 0.6;
+}
+
+/* ---- Form fields ------------------------------------------------------ */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.field__label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.field__input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: inherit;
+  background: var(--color-surface);
+  border: 1px solid var(--color-ink-soft);
+  border-radius: var(--radius-sm);
+}
+
+.field__input:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+}
+
+textarea.field__input {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.field--invalid .field__input {
+  border-color: var(--color-brand-dark);
+}
+
+.field__hint {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.field__error {
+  font-size: 0.75rem;
+  color: var(--color-brand-dark);
+}
+
+/* Input with a fixed prefix, e.g. the peso sign before a price */
+.input-group {
+  display: flex;
+}
+
+.input-group__prefix {
+  display: grid;
+  place-items: center;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  background: #f3f3f5;
+  border: 1px solid var(--color-ink-soft);
+  border-right: 0;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.input-group .field__input {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ---- Dialog ----------------------------------------------------------- */
+
+.dialog {
+  width: min(32rem, calc(100% - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  overflow-y: auto;
+  color: inherit;
+  background: var(--color-surface);
+  border: var(--border-panel);
+  border-radius: var(--radius-md);
+}
+
+.dialog::backdrop {
+  background: rgb(34 33 37 / 0.55);
+}
+
+.dialog__form {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.dialog__title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.dialog__text {
+  line-height: 1.5;
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+/* ---- Alert and toast -------------------------------------------------- */
+
+.alert {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.8125rem;
+  border: 1px solid;
+  border-radius: var(--radius-md);
+}
+
+.alert--error {
+  color: #8f1d1f;
+  background: #fdecec;
+  border-color: #f2b8b8;
+}
+
+.toast {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 50;
+  max-width: 22rem;
+  padding: 0.7rem 1rem;
+  font-size: 0.8125rem;
+  color: #fff;
+  background: var(--color-ink);
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.2);
+}
+
+.toast--error {
+  background: var(--color-brand-dark);
+}

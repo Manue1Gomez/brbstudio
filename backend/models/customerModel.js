@@ -1,4 +1,5 @@
 const { pool } = require('../config/db');
+const { findMissingColumnProblems } = require('../config/schemaCheck');
 
 // Columns the customer table must have for registration and login to work.
 const REQUIRED_COLUMNS = ['customer_id', 'f_name', 'l_name', 'contact_num', 'email', 'password'];
@@ -37,24 +38,10 @@ async function create({ firstName, lastName, contactNumber, email, passwordHash 
 
 // Compares the real table with what the code expects and returns readable problems.
 async function verifySchema() {
-  const [columns] = await pool.query(
-    `SELECT COLUMN_NAME AS name, CHARACTER_MAXIMUM_LENGTH AS length
-       FROM INFORMATION_SCHEMA.COLUMNS
-      WHERE TABLE_SCHEMA = DATABASE() AND LOWER(TABLE_NAME) = 'customer'`
-  );
+  const { columns, problems } = await findMissingColumnProblems('customer', REQUIRED_COLUMNS);
+  if (!columns) return problems;
 
-  if (columns.length === 0) {
-    return ['Table "customer" was not found in the database.'];
-  }
-
-  const problems = [];
-  const found = new Map(columns.map(({ name, length }) => [name.toLowerCase(), length]));
-
-  REQUIRED_COLUMNS.filter((name) => !found.has(name)).forEach((name) =>
-    problems.push(`Table "customer" is missing the column "${name}".`)
-  );
-
-  const passwordLength = found.get('password');
+  const passwordLength = columns.get('password');
   if (passwordLength && passwordLength < MIN_PASSWORD_LENGTH) {
     problems.push(
       `customer.password is VARCHAR(${passwordLength}); passwords are stored as 60-character hashes, so use VARCHAR(255). See database/customer_table.sql.`

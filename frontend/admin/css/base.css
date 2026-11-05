@@ -14,6 +14,10 @@
   --color-brand: #d03c3b;
   --color-brand-dark: #b8262a;
   --color-brand-tint: #ffe9e8;
+  --color-active: #6fd94c;
+  --color-inactive: #b9b9be;
+  --color-danger: #e03a36;
+  --color-danger-border: #e8a3a1;
   --color-event: #beecab;
   --color-event-border: #a9dd95;
   --color-event-pending: #fff0c2;
@@ -91,4 +95,16 @@ img {
 
 [hidden] {
   display: none !important;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }

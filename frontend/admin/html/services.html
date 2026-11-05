@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services | BRB Studios Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/services.css">
+</head>
+<body class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__logo" src="../AdminImages/brb-logo.png" alt="BRB Studios">
+      <p class="sidebar__role">Administrator</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Admin navigation">
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link" href="dashboard.html">
+            <span class="nav-link__icon nav-link__icon--dashboard" aria-hidden="true"></span>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="payments.html">
+            <span class="nav-link__icon nav-link__icon--payments" aria-hidden="true"></span>
+            Payments
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="bookings.html">
+            <span class="nav-link__icon nav-link__icon--bookings" aria-hidden="true"></span>
+            Bookings
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="calendar.html">
+            <span class="nav-link__icon nav-link__icon--calendar" aria-hidden="true"></span>
+            Calendar
+          </a>
+        </li>
+        <li>
+          <a class="nav-link nav-link--active" href="services.html" aria-current="page">
+            <span class="nav-link__icon nav-link__icon--services" aria-hidden="true"></span>
+            Services
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="clients.html">
+            <span class="nav-link__icon nav-link__icon--clients" aria-hidden="true"></span>
+            Clients
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="vouchers.html">
+            <span class="nav-link__icon nav-link__icon--vouchers" aria-hidden="true"></span>
+            Vouchers
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reschedule-requests.html">
+            <span class="nav-link__icon nav-link__icon--reschedule" aria-hidden="true"></span>
+            Rescheduling Requests
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reports.html">
+            <span class="nav-link__icon nav-link__icon--reports" aria-hidden="true"></span>
+            Reports
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a class="sidebar__new-booking" href="new-booking.html">New Booking</a>
+      <a class="sidebar__logout" href="../../customer/html/login.html">
+        <span class="sidebar__logout-icon" aria-hidden="true"></span>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="page-header page-header--split">
+      <div>
+        <p class="page-header__eyebrow">Catalog</p>
+        <h1 class="page-header__title">Services</h1>
+      </div>
+      <button class="btn btn--primary btn--lg" type="button" id="addServiceButton">+ Add Service</button>
+    </header>
+
+    <section aria-label="Services offered by BRB Studios">
+      <div class="service-grid" id="serviceGrid"></div>
+      <p class="status-message service-empty" id="serviceStatus" role="status">Loading services...</p>
+    </section>
+  </main>
+
+  <!-- Add / edit a service -->
+  <dialog class="dialog" id="serviceDialog" aria-labelledby="serviceDialogTitle">
+    <form class="dialog__form" id="serviceForm" novalidate>
+      <h2 class="dialog__title" id="serviceDialogTitle">Add Service</h2>
+
+      <p class="alert alert--error" id="serviceFormError" role="alert" hidden></p>
+
+      <div class="field">
+        <label class="field__label" for="serviceName">Service Name</label>
+        <input class="field__input" id="serviceName" name="name" type="text" maxlength="100" required>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="serviceDescription">Description</label>
+        <textarea class="field__input" id="serviceDescription" name="description" maxlength="500" rows="3" required></textarea>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="servicePrice">Price</label>
+        <div class="input-group">
+          <span class="input-group__prefix" aria-hidden="true">&#8369;</span>
+          <input class="field__input" id="servicePrice" name="price" type="text" inputmode="decimal" placeholder="1500" required>
+        </div>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="field image-field">
+        <span class="field__label">Service Picture</span>
+
+        <div class="image-field__preview">
+          <img class="image-field__image" id="imagePreview" alt="Preview of the service picture" hidden>
+          <span class="image-field__placeholder" id="imagePlaceholder" aria-hidden="true"></span>
+        </div>
+
+        <input class="visually-hidden" id="serviceImage" name="image" type="file" accept="image/jpeg,image/png,image/webp">
+        <div class="image-field__actions">
+          <label class="btn image-field__choose" for="serviceImage" id="chooseImageLabel">Choose image</label>
+          <button class="btn btn--danger" type="button" id="removeImageButton" hidden>Remove image</button>
+        </div>
+
+        <p class="field__hint">JPG, PNG or WEBP, up to 5 MB. Shown to customers on the booking page.</p>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="switch">
+          <input class="switch__input visually-hidden" id="serviceAvailable" type="checkbox" checked>
+          <span class="switch__track"></span>
+          <span class="switch__label" id="serviceAvailableLabel">Active</span>
+        </label>
+        <p class="field__hint">Inactive services are hidden from customers but kept in the catalog.</p>
+      </div>
+
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--primary" type="submit" id="serviceSubmitButton">Save Service</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Confirm removing a service -->
+  <dialog class="dialog" id="deleteDialog" aria-labelledby="deleteDialogTitle">
+    <div class="dialog__form">
+      <h2 class="dialog__title" id="deleteDialogTitle">Remove service?</h2>
+      <p class="dialog__text" id="deleteMessage"></p>
+      <p class="alert alert--error" id="deleteError" role="alert" hidden></p>
+
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--danger-solid" type="button" id="confirmDeleteButton">Remove</button>
+      </div>
+    </div>
+  </dialog>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <template id="serviceCardTemplate">
+    <article class="panel service-card">
+      <div class="service-card__media">
+        <img class="service-card__image" alt="" hidden>
+        <span class="service-card__placeholder" aria-hidden="true"></span>
+      </div>
+
+      <div class="service-card__body">
+        <header class="service-card__header">
+          <h2 class="service-card__name"></h2>
+          <span class="service-card__status"></span>
+        </header>
+        <p class="service-card__description"></p>
+        <p class="service-card__price-label">Price</p>
+        <p class="service-card__price"></p>
+      </div>
+
+      <footer class="service-card__footer">
+        <label class="switch">
+          <input class="switch__input visually-hidden" type="checkbox" data-action="toggle">
+          <span class="switch__track"></span>
+          <span class="switch__label"></span>
+        </label>
+        <button class="btn btn--danger" type="button" data-action="remove">
+          <span class="btn__icon btn__icon--trash" aria-hidden="true"></span>Remove
+        </button>
+        <button class="btn" type="button" data-action="edit">
+          <span class="btn__icon btn__icon--edit" aria-hidden="true"></span>Edit
+        </button>
+      </footer>
+    </article>
+  </template>
+
+  <script type="module" src="../js/services.js"></script>
+</body>
+</html>
