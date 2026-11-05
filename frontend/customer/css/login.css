@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Login page: storefront showcase on the left, sign-in form on the right.
-   ========================================================================== */
-
 .login {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

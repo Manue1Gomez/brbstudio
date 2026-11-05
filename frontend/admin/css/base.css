@@ -1,8 +1,3 @@
-/* ==========================================================================
-   Base: design tokens, reset and global typography.
-   Loaded first on every admin page.
-   ========================================================================== */
-
 :root {
   /* Colors */
   --color-ink: #222125;

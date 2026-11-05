@@ -1,5 +1,3 @@
-// Fetch helpers shared by admin pages. Every failure becomes an ApiError with a readable message.
-
 export class ApiError extends Error {
   constructor(message, status, fieldErrors = {}) {
     super(message);

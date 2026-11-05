@@ -1,9 +1,3 @@
-/* ==========================================================================
-   Dashboard page: summary cards, upcoming bookings and day schedule.
-   ========================================================================== */
-
-/* ---- Overview grid ---------------------------------------------------- */
-
 .overview {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

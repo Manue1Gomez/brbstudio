@@ -1,6 +1,5 @@
 const { pool } = require('./db');
 
-// Returns Map(columnName in lowercase -> max length), or null when the table does not exist.
 async function getTableColumns(tableName) {
   const [columns] = await pool.query(
     `SELECT COLUMN_NAME AS name, CHARACTER_MAXIMUM_LENGTH AS length
@@ -13,7 +12,6 @@ async function getTableColumns(tableName) {
   return new Map(columns.map(({ name, length }) => [name.toLowerCase(), length]));
 }
 
-// Readable startup warnings for a missing table or missing columns.
 async function findMissingColumnProblems(tableName, requiredColumns) {
   const columns = await getTableColumns(tableName);
 

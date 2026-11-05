@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Services page: catalog grid of service cards and the image uploader.
-   ========================================================================== */
-
 .service-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -73,6 +69,7 @@
   font-size: 1rem;
   line-height: 1.25;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
