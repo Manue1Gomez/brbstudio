@@ -56,7 +56,6 @@
   background: var(--color-brand);
 }
 
-/* Icons are SVG masks so they inherit the link's text color */
 .nav-link__icon,
 .sidebar__logout-icon {
   flex-shrink: 0;

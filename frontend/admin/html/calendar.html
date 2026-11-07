@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar | BRB Studios Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/calendar.css">
+</head>
+<body class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__logo" src="../AdminImages/brb-logo.png" alt="BRB Studios">
+      <p class="sidebar__role">Administrator</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Admin navigation">
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link" href="dashboard.html">
+            <span class="nav-link__icon nav-link__icon--dashboard" aria-hidden="true"></span>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="payments.html">
+            <span class="nav-link__icon nav-link__icon--payments" aria-hidden="true"></span>
+            Payments
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="bookings.html">
+            <span class="nav-link__icon nav-link__icon--bookings" aria-hidden="true"></span>
+            Bookings
+          </a>
+        </li>
+        <li>
+          <a class="nav-link nav-link--active" href="calendar.html" aria-current="page">
+            <span class="nav-link__icon nav-link__icon--calendar" aria-hidden="true"></span>
+            Calendar
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="services.html">
+            <span class="nav-link__icon nav-link__icon--services" aria-hidden="true"></span>
+            Services
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="clients.html">
+            <span class="nav-link__icon nav-link__icon--clients" aria-hidden="true"></span>
+            Clients
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="vouchers.html">
+            <span class="nav-link__icon nav-link__icon--vouchers" aria-hidden="true"></span>
+            Vouchers
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reschedule-requests.html">
+            <span class="nav-link__icon nav-link__icon--reschedule" aria-hidden="true"></span>
+            Rescheduling Requests
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reports.html">
+            <span class="nav-link__icon nav-link__icon--reports" aria-hidden="true"></span>
+            Reports
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a class="sidebar__new-booking" href="new-booking.html">New Booking</a>
+      <a class="sidebar__logout" href="../../customer/html/login.html">
+        <span class="sidebar__logout-icon" aria-hidden="true"></span>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="page-header">
+      <p class="page-header__eyebrow">Availability</p>
+      <h1 class="page-header__title">Calendar</h1>
+      <p class="page-header__subtitle">Select a date to see bookings or change its availability.</p>
+    </header>
+
+    <div class="calendar-layout">
+      <section class="panel calendar" aria-label="Monthly calendar">
+        <header class="calendar__header">
+          <button class="calendar__nav calendar__nav--previous" type="button" id="previousMonth" aria-label="Previous month"></button>
+          <h2 class="calendar__title" id="calendarTitle" aria-live="polite"></h2>
+          <button class="calendar__nav calendar__nav--next" type="button" id="nextMonth" aria-label="Next month"></button>
+        </header>
+
+        <div class="calendar__weekdays" aria-hidden="true">
+          <span>Sun</span><span>Mon</span><span>Tues</span><span>Wed</span><span>Thurs</span><span>Fri</span><span>Sat</span>
+        </div>
+        <div class="calendar__grid" id="calendarGrid"></div>
+
+        <ul class="calendar__legend" aria-label="Legend">
+          <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--unavailable"></span>Unavailable</li>
+          <li class="legend-item"><span class="legend-item__swatch"></span>Available</li>
+          <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--selected"></span>Selected</li>
+          <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--dot"></span>Has Bookings</li>
+        </ul>
+      </section>
+
+      <div class="calendar-side">
+        <section class="panel day-panel" aria-labelledby="dayTitle">
+          <h2 class="day-panel__title" id="dayTitle"></h2>
+
+          <div class="day-panel__body">
+            <h3 class="day-panel__label">Bookings</h3>
+            <ul class="booking-list" id="bookingList"></ul>
+            <p class="day-panel__empty" id="bookingEmpty" role="status"></p>
+          </div>
+
+          <footer class="day-panel__footer">
+            <p class="day-panel__note" id="dayNote" hidden></p>
+            <button class="btn btn--block btn--lg" type="button" id="toggleBlockButton"></button>
+          </footer>
+        </section>
+
+        <section class="panel blocked-panel" aria-labelledby="blockedTitle">
+          <h2 class="blocked-panel__title" id="blockedTitle">Blocked Dates</h2>
+          <ul class="blocked-list" id="blockedList"></ul>
+          <p class="blocked-panel__empty" id="blockedEmpty" hidden>No blocked dates.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <dialog class="dialog" id="blockDialog" aria-labelledby="blockDialogTitle">
+    <div class="dialog__form">
+      <h2 class="dialog__title" id="blockDialogTitle">Block this date?</h2>
+      <p class="dialog__text" id="blockDialogMessage"></p>
+
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--primary" type="button" id="confirmBlockButton">Mark as Unavailable</button>
+      </div>
+    </div>
+  </dialog>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <template id="bookingItemTemplate">
+    <li class="booking-item">
+      <div class="booking-item__heading">
+        <p class="booking-item__time"></p>
+        <span class="booking-item__status"></span>
+      </div>
+      <p class="booking-item__client"></p>
+      <p class="booking-item__services"></p>
+    </li>
+  </template>
+
+  <template id="blockedItemTemplate">
+    <li class="blocked-item">
+      <button class="blocked-item__date" type="button"></button>
+      <button class="blocked-item__remove" type="button">Remove Block</button>
+    </li>
+  </template>
+
+  <script type="module" src="../js/calendar.js"></script>
+</body>
+</html>

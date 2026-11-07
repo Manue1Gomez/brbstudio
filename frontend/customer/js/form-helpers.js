@@ -1,5 +1,3 @@
-// Small DOM helpers shared by the register and login forms.
-
 const NETWORK_ERROR_MESSAGE = 'Unable to reach the server. Please check your connection and try again.';
 const GENERIC_ERROR_MESSAGE = 'Something went wrong. Please try again.';
 
@@ -30,7 +28,6 @@ export function clearFormErrors(form, alertElement) {
   alertElement.hidden = true;
 }
 
-// errors: { fieldName: 'message' }. Focuses the first invalid field.
 export function showFieldErrors(form, errors) {
   const inputs = Object.keys(errors)
     .map((name) => form.elements[name])
@@ -51,7 +48,6 @@ export function setSubmitting(button, isSubmitting) {
   button.disabled = isSubmitting;
 }
 
-// Shows the server's field errors, or its message, or a fallback.
 export function showServerError(form, alertElement, { data }) {
   if (showFieldErrors(form, data.errors ?? {})) return;
   showAlert(alertElement, data.message || GENERIC_ERROR_MESSAGE);
@@ -61,7 +57,6 @@ export function showNetworkError(alertElement) {
   showAlert(alertElement, NETWORK_ERROR_MESSAGE);
 }
 
-// Typing in a field clears that field's error.
 export function clearErrorOnInput(form) {
   form.addEventListener('input', ({ target }) => {
     if (target.matches('.form-field__input')) clearFieldError(target);

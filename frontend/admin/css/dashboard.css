@@ -27,8 +27,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- Upcoming bookings ------------------------------------------------ */
-
 .upcoming {
   display: flex;
   flex-direction: column;
@@ -93,8 +91,6 @@
 .upcoming-item__client {
   font-size: 0.75rem;
 }
-
-/* ---- Day schedule ----------------------------------------------------- */
 
 .day-schedule {
   margin-top: 1.5rem;
@@ -195,9 +191,7 @@
   height: var(--schedule-height);
   border-left: 1px solid var(--color-line);
   background:
-    /* first hour line, drawn heavier like the mockup */
     linear-gradient(var(--color-line-strong), var(--color-line-strong)) 0 var(--grid-offset) / 100% 2px no-repeat,
-    /* one thin line per hour */
     linear-gradient(var(--color-line) 1px, transparent 1px) 0 var(--grid-offset) / 100% var(--hour-height) repeat-y;
 }
 
@@ -223,8 +217,6 @@
   background: var(--color-event-done);
   border-color: var(--color-event-done-border);
 }
-
-/* ---- Responsive ------------------------------------------------------- */
 
 @media (max-width: 68.75rem) {
   .overview {

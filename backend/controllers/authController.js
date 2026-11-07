@@ -1,16 +1,8 @@
 const authService = require('../services/authService');
+const sendError = require('./errorResponse');
 
 const SESSION_COOKIE = 'brb.sid';
 
-// Expected problems (bad input, wrong password) become JSON responses; anything else is a real error.
-function respondWithError(error, res, next) {
-  if (error instanceof authService.AuthError) {
-    return res.status(error.status).json({ message: error.message, errors: error.fieldErrors });
-  }
-  return next(error);
-}
-
-// A fresh session id on every login prevents session fixation.
 function startSession(req, customer) {
   return new Promise((resolve, reject) => {
     req.session.regenerate((regenerateError) => {
@@ -31,7 +23,7 @@ async function register(req, res, next) {
       redirectTo: `${authService.LOGIN_PAGE}?registered=1`,
     });
   } catch (error) {
-    respondWithError(error, res, next);
+    sendError(error, res, next);
   }
 }
 
@@ -42,7 +34,7 @@ async function login(req, res, next) {
 
     res.json({ message: 'Login successful.', redirectTo: authService.CUSTOMER_HOME, customer });
   } catch (error) {
-    respondWithError(error, res, next);
+    sendError(error, res, next);
   }
 }
 
@@ -55,7 +47,6 @@ function logout(req, res, next) {
   });
 }
 
-// Lets any page ask "who is logged in?"
 function getCurrentCustomer(req, res) {
   if (!req.session.customer) {
     return res.status(401).json({ message: 'Not logged in.' });

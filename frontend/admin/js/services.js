@@ -32,17 +32,14 @@ const elements = {
 };
 
 let services = [];
-let editingService = null; // null while adding a new service
+let editingService = null;
 let serviceToDelete = null;
 let removeCurrentImage = false;
 let previewObjectUrl = null;
 let toastTimer = null;
 
-/* ---- Helpers ---------------------------------------------------------- */
-
 const findService = (id) => services.find((service) => service.id === Number(id));
 
-// Whole amounts show as 1,500; amounts with centavos always show two digits (12,500.50).
 function formatPrice(price) {
   const amount = Number(price);
   const decimals = Number.isInteger(amount) ? 0 : 2;
@@ -65,8 +62,6 @@ function showToast(message, type = 'success') {
 function setAvailabilityLabel(labelElement, isAvailable) {
   labelElement.textContent = isAvailable ? 'Active' : 'Inactive';
 }
-
-/* ---- Service cards ---------------------------------------------------- */
 
 function createCard(service) {
   const card = elements.cardTemplate.content.firstElementChild.cloneNode(true);
@@ -125,8 +120,6 @@ async function loadServices() {
   }
 }
 
-/* ---- Active toggle ---------------------------------------------------- */
-
 async function handleToggle(toggle) {
   const card = toggle.closest('.service-card');
   const available = toggle.checked;
@@ -144,8 +137,6 @@ async function handleToggle(toggle) {
     showToast(error.message, 'error');
   }
 }
-
-/* ---- Add / edit dialog ------------------------------------------------ */
 
 function setPreview(url) {
   elements.imagePreview.hidden = !url;
@@ -229,7 +220,6 @@ function handleRemoveImage() {
   releasePreviewUrl();
   setPreview(null);
 
-  // Only an image that is already saved needs telling the server to delete it.
   removeCurrentImage = Boolean(editingService?.imageUrl);
   elements.removeImageButton.hidden = true;
 }
@@ -238,7 +228,6 @@ function buildFormData() {
   const formData = new FormData(elements.serviceForm);
   const [file] = elements.imageInput.files;
 
-  // An empty file input still sends a blank part; leave it out.
   if (!file) formData.delete('image');
 
   formData.set('available', elements.availableInput.checked);
@@ -284,8 +273,6 @@ function showServiceFormError(error) {
   elements.serviceFormError.hidden = false;
 }
 
-/* ---- Remove dialog ---------------------------------------------------- */
-
 function openDeleteDialog(service) {
   serviceToDelete = service;
 
@@ -317,8 +304,6 @@ async function handleConfirmDelete() {
   }
 }
 
-/* ---- Wiring ----------------------------------------------------------- */
-
 elements.addButton.addEventListener('click', () => openServiceDialog());
 
 elements.grid.addEventListener('click', (event) => {
@@ -336,7 +321,6 @@ elements.grid.addEventListener('change', (event) => {
 });
 
 elements.serviceForm.addEventListener('submit', handleServiceSubmit);
-// Editing a field clears its error straight away.
 elements.serviceForm.addEventListener('input', ({ target }) => {
   const field = target.closest('.field');
   if (!field) return;
@@ -351,7 +335,6 @@ elements.availableInput.addEventListener('change', () =>
 );
 elements.confirmDelete.addEventListener('click', handleConfirmDelete);
 
-// Cancel buttons, and clicking the dark area outside a dialog, close it.
 document.querySelectorAll('dialog').forEach((dialog) => {
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog || event.target.closest('[data-dialog-close]')) dialog.close();

@@ -3,7 +3,6 @@ const path = require('path');
 const crypto = require('crypto');
 const { SERVICE_IMAGE_DIR, SERVICE_IMAGE_URL } = require('../config/upload');
 
-// The file's first bytes tell its real format; the browser-reported type can be faked.
 const FORMATS = [
   {
     extension: '.jpg',
@@ -32,7 +31,6 @@ function isSupportedImage(buffer) {
   return detectExtension(buffer) !== null;
 }
 
-// Saves the image under a random name and returns the public URL path stored in the database.
 async function saveServiceImage(buffer) {
   const filename = `${crypto.randomUUID()}${detectExtension(buffer)}`;
 
@@ -42,7 +40,6 @@ async function saveServiceImage(buffer) {
   return `${SERVICE_IMAGE_URL}/${filename}`;
 }
 
-// Best-effort cleanup: a leftover file is harmless, so failures never break the request.
 async function deleteServiceImage(imagePath) {
   if (!imagePath || !imagePath.startsWith(`${SERVICE_IMAGE_URL}/`)) return;
 

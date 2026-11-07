@@ -34,7 +34,6 @@ async function findById(id) {
   return row || null;
 }
 
-// Used by the dashboard: one column per service the studio currently offers.
 async function findActive() {
   const [rows] = await pool.query(
     `SELECT service_id AS serviceId,
@@ -72,10 +71,9 @@ async function remove(id) {
   await pool.query('DELETE FROM service WHERE service_id = ?', [id]);
 }
 
-// True when any booking uses this service. Treats a not-yet-created booking table as "no bookings".
 async function hasBookings(id) {
   try {
-    const [[row]] = await pool.query('SELECT COUNT(*) AS total FROM booking WHERE service_id = ?', [id]);
+    const [[row]] = await pool.query('SELECT COUNT(*) AS total FROM booking_service WHERE service_id = ?', [id]);
     return row.total > 0;
   } catch (error) {
     if (error.code === 'ER_NO_SUCH_TABLE' || error.code === 'ER_BAD_FIELD_ERROR') return false;

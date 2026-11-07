@@ -1,5 +1,6 @@
 const serviceModel = require('../models/serviceModel');
 const imageStorage = require('./imageStorage');
+const AppError = require('./appError');
 
 const MYSQL_DUPLICATE_ENTRY = 'ER_DUP_ENTRY';
 const MYSQL_ROW_IS_REFERENCED = 'ER_ROW_IS_REFERENCED_2';
@@ -8,31 +9,21 @@ const MAX_NAME_LENGTH = 100;
 const MAX_DESCRIPTION_LENGTH = 500;
 const PRICE_PATTERN = /^\d{1,8}(\.\d{1,2})?$/;
 
-class ServiceError extends Error {
-  constructor(message, status, fieldErrors = {}) {
-    super(message);
-    this.name = 'ServiceError';
-    this.status = status;
-    this.fieldErrors = fieldErrors;
-  }
-}
-
 const nameTakenError = () =>
-  new ServiceError('A service with this name already exists.', 409, {
+  new AppError('A service with this name already exists.', 409, {
     name: 'A service with this name already exists.',
   });
 
 const hasBookingsError = () =>
-  new ServiceError(
+  new AppError(
     "This service already has bookings, so it can't be removed. Set it to Inactive instead.",
     409
   );
 
-const notFoundError = () => new ServiceError('Service not found.', 404);
+const notFoundError = () => new AppError('Service not found.', 404);
 
 const asText = (value) => String(value ?? '');
 
-// Form data arrives as text ("true", "on", "1"); anything unrecognised falls back to the default.
 function parseBoolean(value, fallback) {
   if (value === undefined) return fallback;
   if (typeof value === 'boolean') return value;
@@ -82,7 +73,7 @@ function validateFields(fields, file) {
   }
 
   if (Object.keys(errors).length > 0) {
-    throw new ServiceError('Please fix the highlighted fields.', 400, errors);
+    throw new AppError('Please fix the highlighted fields.', 400, errors);
   }
 }
 
@@ -101,7 +92,6 @@ async function listServices() {
   return (await serviceModel.findAll()).map(toPublicService);
 }
 
-// What customers see: only services the studio currently offers.
 async function listAvailableServices() {
   return (await serviceModel.findAvailable()).map(toPublicService);
 }
@@ -153,7 +143,6 @@ async function updateService(rawId, body, file) {
     throw error;
   }
 
-  // The old picture is only deleted after the database change has succeeded.
   if (imagePath !== existing.imagePath) await imageStorage.deleteServiceImage(existing.imagePath);
 
   return toPublicService(await serviceModel.findById(id));
@@ -163,7 +152,7 @@ async function setServiceAvailability(rawId, available) {
   const id = parseId(rawId);
 
   if (typeof available !== 'boolean') {
-    throw new ServiceError('Availability must be true or false.', 400);
+    throw new AppError('Availability must be true or false.', 400);
   }
   if (!(await serviceModel.findById(id))) throw notFoundError();
 
@@ -181,7 +170,6 @@ async function deleteService(rawId) {
   try {
     await serviceModel.remove(id);
   } catch (error) {
-    // Safety net when the booking table has a foreign key to service.
     if (error.code === MYSQL_ROW_IS_REFERENCED) throw hasBookingsError();
     throw error;
   }
@@ -190,7 +178,6 @@ async function deleteService(rawId) {
 }
 
 module.exports = {
-  ServiceError,
   listServices,
   listAvailableServices,
   createService,

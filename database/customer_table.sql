@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS customer (
   password     VARCHAR(255) NOT NULL,
   PRIMARY KEY (customer_id),
   UNIQUE KEY uq_customer_email (email)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

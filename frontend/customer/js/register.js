@@ -21,7 +21,6 @@ const REQUIRED_MESSAGES = {
   confirmPassword: 'Please confirm your password.',
 };
 
-// Quick checks for instant feedback. The server repeats and enforces every rule.
 function findLocalErrors(values) {
   const errors = {};
 

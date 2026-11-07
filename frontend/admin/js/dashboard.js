@@ -1,6 +1,5 @@
 const API_BASE = '/api/admin/dashboard';
 
-// Hours shown on the day schedule grid (24-hour clock).
 const SCHEDULE_FIRST_HOUR = 8;
 const SCHEDULE_LAST_HOUR = 20;
 
@@ -31,8 +30,6 @@ const shortMonthFormat = new Intl.DateTimeFormat('en-US', { month: 'short' });
 let selectedDate = new Date();
 let latestScheduleRequest = 0;
 
-/* ---- Helpers ---------------------------------------------------------- */
-
 async function fetchJson(path) {
   const response = await fetch(`${API_BASE}${path}`);
 
@@ -50,7 +47,6 @@ function toIsoDate(date) {
   return `${date.getFullYear()}-${month}-${day}`;
 }
 
-// Parses YYYY-MM-DD as a local date (new Date('YYYY-MM-DD') would be read as UTC).
 function fromIsoDate(isoDate) {
   const [year, month, day] = isoDate.split('-').map(Number);
   return new Date(year, month - 1, day);
@@ -66,8 +62,6 @@ function showMessage(element, message) {
   element.hidden = false;
 }
 
-/* ---- Summary cards ---------------------------------------------------- */
-
 async function loadSummary() {
   try {
     const summary = await fetchJson('/summary');
@@ -80,8 +74,6 @@ async function loadSummary() {
     console.error('Could not load dashboard summary:', error);
   }
 }
-
-/* ---- Upcoming bookings ------------------------------------------------ */
 
 function createUpcomingItem(booking) {
   const item = elements.upcomingTemplate.content.cloneNode(true);
@@ -112,14 +104,11 @@ async function loadUpcomingBookings() {
   }
 }
 
-/* ---- Day schedule ----------------------------------------------------- */
-
 function createScheduleEvent(booking) {
   const event = elements.scheduleEventTemplate.content.firstElementChild.cloneNode(true);
   const gridStart = SCHEDULE_FIRST_HOUR * 60;
   const gridEnd = SCHEDULE_LAST_HOUR * 60;
 
-  // Clamp to the visible grid so late or early bookings never spill out of the column.
   const start = Math.max(booking.startMinutes, gridStart);
   const end = Math.min(booking.endMinutes, gridEnd);
 
@@ -195,7 +184,6 @@ async function loadDaySchedule() {
   try {
     const schedule = await fetchJson(`/day-schedule?date=${toIsoDate(selectedDate)}`);
 
-    // Ignore responses that arrive after the admin has already moved to another day.
     if (requestId === latestScheduleRequest) renderSchedule(schedule);
   } catch (error) {
     if (requestId !== latestScheduleRequest) return;
@@ -214,8 +202,6 @@ function moveSelectedDate(days) {
   );
   loadDaySchedule();
 }
-
-/* ---- Init ------------------------------------------------------------- */
 
 elements.previousDay.addEventListener('click', () => moveSelectedDate(-1));
 elements.nextDay.addEventListener('click', () => moveSelectedDate(1));

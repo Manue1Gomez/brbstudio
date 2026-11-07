@@ -1,6 +1,5 @@
 node_modules/
 .env
-
-# Uploaded service pictures stay on each machine; only the folder is tracked.
+.env.example
 uploads/services/*
 !uploads/services/.gitkeep

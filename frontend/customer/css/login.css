@@ -10,8 +10,6 @@
   padding: 2rem clamp(1.5rem, 5vw, 5rem);
 }
 
-/* ---- Left: logo and storefront photos --------------------------------- */
-
 .login__showcase {
   display: flex;
   flex-direction: column;
@@ -34,8 +32,6 @@
   object-fit: cover;
   border: 2px solid var(--color-ink-soft);
 }
-
-/* ---- Right: sign-in panel --------------------------------------------- */
 
 .login__panel {
   width: 100%;

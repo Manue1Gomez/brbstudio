@@ -15,7 +15,6 @@ const formError = document.getElementById('formError');
 const formNotice = document.getElementById('formNotice');
 const submitButton = form.querySelector('[type="submit"]');
 
-// register.js sends people here with ?registered=1 after a successful sign-up.
 if (new URLSearchParams(window.location.search).get('registered') === '1') {
   showAlert(formNotice, 'Account created! You can now log in.');
 }

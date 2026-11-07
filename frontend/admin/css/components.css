@@ -50,13 +50,16 @@
   background: #c62f2b;
 }
 
+.btn--block {
+  width: 100%;
+}
+
 .btn--lg {
   height: 2.4rem;
   padding: 0 1.4rem;
   font-size: 0.9375rem;
 }
 
-/* Icons are SVG masks so they take the color of the text or an explicit one */
 .btn__icon {
   flex-shrink: 0;
   width: 0.9rem;
@@ -68,8 +71,7 @@
 
 .btn__icon--trash { --icon: url('../AdminImages/icons/trash.svg'); color: var(--color-danger); }
 .btn__icon--edit  { --icon: url('../AdminImages/icons/edit.svg'); }
-
-/* ---- Switch (active / inactive toggle) -------------------------------- */
+.btn__icon--ban   { --icon: url('../AdminImages/icons/ban.svg'); }
 
 .switch {
   display: inline-flex;
@@ -118,8 +120,6 @@
   opacity: 0.6;
 }
 
-/* ---- Form fields ------------------------------------------------------ */
-
 .field {
   display: flex;
   flex-direction: column;
@@ -166,7 +166,6 @@ textarea.field__input {
   color: var(--color-brand-dark);
 }
 
-/* Input with a fixed prefix, e.g. the peso sign before a price */
 .input-group {
   display: flex;
 }
@@ -185,8 +184,6 @@ textarea.field__input {
 .input-group .field__input {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-
-/* ---- Dialog ----------------------------------------------------------- */
 
 .dialog {
   width: min(32rem, calc(100% - 2rem));
@@ -226,8 +223,6 @@ textarea.field__input {
   gap: 0.6rem;
   margin-top: 0.25rem;
 }
-
-/* ---- Alert and toast -------------------------------------------------- */
 
 .alert {
   padding: 0.6rem 0.8rem;

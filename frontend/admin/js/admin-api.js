@@ -16,12 +16,7 @@ async function request(url, options) {
     throw new ApiError('Unable to reach the server. Please check your connection and try again.', 0);
   }
 
-  let data = {};
-  try {
-    data = await response.json();
-  } catch {
-    // Empty body (204) or a non-JSON error page.
-  }
+  const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
     throw new ApiError(data.message || 'Something went wrong. Please try again.', response.status, data.errors);
@@ -39,7 +34,6 @@ export const sendJson = (url, method, body) =>
     body: JSON.stringify(body),
   });
 
-// FormData sets its own multipart Content-Type, so no headers here.
 export const sendForm = (url, method, formData) => request(url, { method, body: formData });
 
 export const deleteRequest = (url) => request(url, { method: 'DELETE' });

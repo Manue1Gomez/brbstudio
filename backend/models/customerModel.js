@@ -1,9 +1,7 @@
 const { pool } = require('../config/db');
 const { findMissingColumnProblems } = require('../config/schemaCheck');
 
-// Columns the customer table must have for registration and login to work.
 const REQUIRED_COLUMNS = ['customer_id', 'f_name', 'l_name', 'contact_num', 'email', 'password'];
-// A bcrypt hash is 60 characters long.
 const MIN_PASSWORD_LENGTH = 60;
 
 async function countAll() {
@@ -36,7 +34,6 @@ async function create({ firstName, lastName, contactNumber, email, passwordHash 
   return result.insertId;
 }
 
-// Compares the real table with what the code expects and returns readable problems.
 async function verifySchema() {
   const { columns, problems } = await findMissingColumnProblems('customer', REQUIRED_COLUMNS);
   if (!columns) return problems;

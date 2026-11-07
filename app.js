@@ -7,10 +7,14 @@ const sessionMiddleware = require('./backend/config/session');
 const { UPLOADS_ROOT } = require('./backend/config/upload');
 const customerModel = require('./backend/models/customerModel');
 const serviceModel = require('./backend/models/serviceModel');
+const bookingModel = require('./backend/models/bookingModel');
+const blockedDateModel = require('./backend/models/blockedDateModel');
 const authRoutes = require('./backend/routes/authRoutes');
 const dashboardRoutes = require('./backend/routes/dashboardRoutes');
 const serviceRoutes = require('./backend/routes/serviceRoutes');
 const adminServiceRoutes = require('./backend/routes/adminServiceRoutes');
+const calendarRoutes = require('./backend/routes/calendarRoutes');
+const adminCalendarRoutes = require('./backend/routes/adminCalendarRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,16 +34,16 @@ app.get('/admin', (req, res) => res.redirect('/admin/html/dashboard.html'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/calendar', calendarRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/services', adminServiceRoutes);
+app.use('/api/admin/calendar', adminCalendarRoutes);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Endpoint not found.' });
 });
 
-// eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
-  // Client mistakes (e.g. malformed JSON) keep their 4xx status; everything else is a 500.
   const isClientError = error.status >= 400 && error.status < 500;
 
   if (!isClientError) console.error(error);
@@ -59,6 +63,8 @@ app.listen(PORT, async () => {
     const problems = [
       ...(await customerModel.verifySchema()),
       ...(await serviceModel.verifySchema()),
+      ...(await bookingModel.verifySchema()),
+      ...(await blockedDateModel.verifySchema()),
     ];
     problems.forEach((problem) => console.warn(`Database warning: ${problem}`));
   } catch (error) {
