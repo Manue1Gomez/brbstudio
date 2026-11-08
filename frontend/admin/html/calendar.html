@@ -102,7 +102,23 @@
       <section class="panel calendar" aria-label="Monthly calendar">
         <header class="calendar__header">
           <button class="calendar__nav calendar__nav--previous" type="button" id="previousMonth" aria-label="Previous month"></button>
-          <h2 class="calendar__title" id="calendarTitle" aria-live="polite"></h2>
+          <div class="month-picker">
+            <h2 class="calendar__title">
+              <button class="calendar__title-button" type="button" id="monthPickerButton" aria-haspopup="true" aria-expanded="false" aria-controls="monthPicker">
+                <span id="calendarTitle" aria-live="polite"></span>
+                <span class="calendar__caret" aria-hidden="true"></span>
+              </button>
+            </h2>
+
+            <div class="month-picker__popover" id="monthPicker" role="group" aria-label="Choose a month and year" hidden>
+              <div class="month-picker__year">
+                <button class="month-picker__year-nav month-picker__year-nav--previous" type="button" id="previousYear" aria-label="Previous year"></button>
+                <span class="month-picker__year-label" id="pickerYear"></span>
+                <button class="month-picker__year-nav month-picker__year-nav--next" type="button" id="nextYear" aria-label="Next year"></button>
+              </div>
+              <div class="month-picker__grid" id="monthPickerGrid"></div>
+            </div>
+          </div>
           <button class="calendar__nav calendar__nav--next" type="button" id="nextMonth" aria-label="Next month"></button>
         </header>
 
@@ -114,6 +130,8 @@
         <ul class="calendar__legend" aria-label="Legend">
           <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--unavailable"></span>Unavailable</li>
           <li class="legend-item"><span class="legend-item__swatch"></span>Available</li>
+          <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--past"></span>Past</li>
+          <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--today"></span>Today</li>
           <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--selected"></span>Selected</li>
           <li class="legend-item"><span class="legend-item__swatch legend-item__swatch--dot"></span>Has Bookings</li>
         </ul>
@@ -172,7 +190,7 @@
   <template id="blockedItemTemplate">
     <li class="blocked-item">
       <button class="blocked-item__date" type="button"></button>
-      <button class="blocked-item__remove" type="button">Remove Block</button>
+      <button class="btn btn--sm blocked-item__remove" type="button">Remove Block</button>
     </li>
   </template>
 

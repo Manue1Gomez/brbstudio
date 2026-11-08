@@ -2,15 +2,27 @@ import { deleteRequest, getJson, sendJson } from './admin-api.js';
 
 const API_BASE = '/api/admin/calendar';
 const TOAST_DURATION_MS = 3500;
+const KEEP_SELECTION_AREAS = '.calendar, .day-panel, .blocked-panel, .sidebar, dialog, .toast';
+
+const ICON_BAN = '<span class="btn__icon btn__icon--ban" aria-hidden="true"></span>';
+const ICON_CHECK = '<span class="btn__icon btn__icon--check" aria-hidden="true"></span>';
 
 const monthTitleFormat = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 const longDateFormat = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const shortMonthFormat = new Intl.DateTimeFormat('en-US', { month: 'short' });
+const monthNames = Array.from({ length: 12 }, (_, index) => shortMonthFormat.format(new Date(2000, index, 1)));
 
 const elements = {
   title: document.getElementById('calendarTitle'),
   grid: document.getElementById('calendarGrid'),
   previousMonth: document.getElementById('previousMonth'),
   nextMonth: document.getElementById('nextMonth'),
+  monthPickerButton: document.getElementById('monthPickerButton'),
+  monthPicker: document.getElementById('monthPicker'),
+  monthPickerGrid: document.getElementById('monthPickerGrid'),
+  pickerYear: document.getElementById('pickerYear'),
+  previousYear: document.getElementById('previousYear'),
+  nextYear: document.getElementById('nextYear'),
   dayTitle: document.getElementById('dayTitle'),
   bookingList: document.getElementById('bookingList'),
   bookingEmpty: document.getElementById('bookingEmpty'),
@@ -37,16 +49,19 @@ const fromIsoDate = (isoDate) => {
 
 const formatLongDate = (isoDate) => longDateFormat.format(fromIsoDate(isoDate));
 
-const today = toIsoDate(new Date());
+const now = new Date();
+const today = toIsoDate(now);
 
 const state = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth(),
+  year: now.getFullYear(),
+  month: now.getMonth(),
   selectedDate: today,
   bookedDates: new Set(),
   blockedDates: new Set(),
   day: null,
   busy: false,
+  pickerOpen: false,
+  pickerYear: now.getFullYear(),
 };
 
 let latestMonthRequest = 0;
@@ -70,6 +85,8 @@ function showToast(message, type = 'success') {
 function describeDay(isoDate) {
   const parts = [formatLongDate(isoDate)];
 
+  if (isoDate === today) parts.push('today');
+  if (isoDate < today) parts.push('past date');
   if (state.blockedDates.has(isoDate)) parts.push('unavailable');
   if (state.bookedDates.has(isoDate)) parts.push('has bookings');
 
@@ -91,9 +108,10 @@ function createDayCell(day) {
   number.textContent = day;
   cell.append(number);
 
+  cell.classList.toggle('calendar__day--past', isoDate < today);
+  cell.classList.toggle('calendar__day--today', isoDate === today);
   cell.classList.toggle('calendar__day--unavailable', state.blockedDates.has(isoDate));
   cell.classList.toggle('calendar__day--selected', isoDate === state.selectedDate);
-  cell.classList.toggle('calendar__day--today', isoDate === today);
 
   if (state.bookedDates.has(isoDate)) {
     const dot = document.createElement('span');
@@ -141,18 +159,13 @@ function createBookingItem(booking) {
 
 function renderToggleButton() {
   const { day, selectedDate } = state;
-  const isPast = selectedDate < today;
+  const isPast = Boolean(selectedDate) && selectedDate < today;
   const isBlocked = Boolean(day?.blocked);
   const button = elements.toggleBlock;
 
-  button.disabled = state.busy || !day || isPast;
-  button.className = `btn btn--block btn--lg ${isBlocked ? '' : 'btn--primary'}`.trim();
-
-  if (isBlocked) {
-    button.textContent = 'Mark as Available';
-  } else {
-    button.innerHTML = '<span class="btn__icon btn__icon--ban" aria-hidden="true"></span>Mark as Unavailable';
-  }
+  button.disabled = state.busy || !selectedDate || !day || isPast;
+  button.className = `btn btn--block btn--lg ${isBlocked ? 'btn--success' : 'btn--primary'}`;
+  button.innerHTML = isBlocked ? `${ICON_CHECK}Mark as Available` : `${ICON_BAN}Mark as Unavailable`;
 
   elements.dayNote.hidden = !isPast;
   elements.dayNote.textContent = "Dates that have already passed can't be changed.";
@@ -160,6 +173,15 @@ function renderToggleButton() {
 
 function renderDayPanel() {
   const { day, selectedDate } = state;
+
+  if (!selectedDate) {
+    elements.dayTitle.textContent = 'No date selected';
+    elements.bookingList.replaceChildren();
+    elements.bookingEmpty.textContent = 'Select a date on the calendar to see its bookings.';
+    elements.bookingEmpty.hidden = false;
+    renderToggleButton();
+    return;
+  }
 
   elements.dayTitle.textContent = formatLongDate(selectedDate);
 
@@ -210,12 +232,14 @@ async function loadMonth() {
 }
 
 async function loadDay() {
-  const requestId = ++latestDayRequest;
   const date = state.selectedDate;
+  if (!date) return;
+
+  const requestId = ++latestDayRequest;
 
   try {
     const day = await getJson(`${API_BASE}/day?date=${date}`);
-    if (requestId !== latestDayRequest) return;
+    if (requestId !== latestDayRequest || state.selectedDate !== date) return;
 
     state.day = day;
     renderDayPanel();
@@ -241,25 +265,92 @@ function selectDate(isoDate) {
   loadDay();
 }
 
-function changeMonth(step) {
-  const target = new Date(state.year, state.month + step, 1);
+function clearSelection() {
+  latestDayRequest += 1;
+  state.selectedDate = null;
+  state.day = null;
 
-  state.year = target.getFullYear();
-  state.month = target.getMonth();
+  renderCalendar();
+  renderDayPanel();
+}
+
+function goToMonth(year, month) {
+  state.year = year;
+  state.month = month;
   state.bookedDates = new Set();
   state.blockedDates = new Set();
 
-  const isCurrentMonth = target.getFullYear() === new Date().getFullYear() && target.getMonth() === new Date().getMonth();
+  if (state.selectedDate && !state.selectedDate.startsWith(monthKey())) {
+    clearSelection();
+  } else {
+    renderCalendar();
+  }
 
-  selectDate(isCurrentMonth ? today : `${monthKey()}-01`);
   loadMonth();
 }
 
-async function refreshAvailability() {
-  state.day = null;
-  renderDayPanel();
+function stepMonth(step) {
+  const target = new Date(state.year, state.month + step, 1);
+  goToMonth(target.getFullYear(), target.getMonth());
+}
 
-  await Promise.all([loadMonth(), loadDay(), loadBlockedList()]);
+function renderMonthPicker() {
+  elements.pickerYear.textContent = state.pickerYear;
+
+  const buttons = monthNames.map((name, index) => {
+    const button = document.createElement('button');
+    const isShown = state.pickerYear === state.year && index === state.month;
+    const isCurrent = state.pickerYear === now.getFullYear() && index === now.getMonth();
+
+    button.type = 'button';
+    button.className = 'month-picker__month';
+    button.dataset.month = index;
+    button.textContent = name;
+    button.setAttribute('aria-pressed', String(isShown));
+    button.classList.toggle('month-picker__month--selected', isShown);
+    button.classList.toggle('month-picker__month--current', isCurrent && !isShown);
+
+    return button;
+  });
+
+  elements.monthPickerGrid.replaceChildren(...buttons);
+}
+
+function openMonthPicker() {
+  state.pickerOpen = true;
+  state.pickerYear = state.year;
+
+  renderMonthPicker();
+  elements.monthPicker.hidden = false;
+  elements.monthPickerButton.setAttribute('aria-expanded', 'true');
+
+  const target = elements.monthPickerGrid.querySelector('[aria-pressed="true"]') ?? elements.monthPickerGrid.firstElementChild;
+  target.focus();
+}
+
+function closeMonthPicker({ restoreFocus = false } = {}) {
+  state.pickerOpen = false;
+  elements.monthPicker.hidden = true;
+  elements.monthPickerButton.setAttribute('aria-expanded', 'false');
+
+  if (restoreFocus) elements.monthPickerButton.focus();
+}
+
+function shiftPickerYear(step) {
+  state.pickerYear += step;
+  renderMonthPicker();
+}
+
+async function refreshAvailability() {
+  const tasks = [loadMonth(), loadBlockedList()];
+
+  if (state.selectedDate) {
+    state.day = null;
+    renderDayPanel();
+    tasks.push(loadDay());
+  }
+
+  await Promise.all(tasks);
 }
 
 async function runAction(action, successMessage) {
@@ -293,7 +384,7 @@ function unblockDate(isoDate) {
 
 function handleToggleBlock() {
   const { day, selectedDate } = state;
-  if (!day) return;
+  if (!day || !selectedDate) return;
 
   if (day.blocked) {
     unblockDate(selectedDate);
@@ -312,12 +403,31 @@ function handleToggleBlock() {
   elements.blockDialog.showModal();
 }
 
-elements.previousMonth.addEventListener('click', () => changeMonth(-1));
-elements.nextMonth.addEventListener('click', () => changeMonth(1));
+elements.previousMonth.addEventListener('click', () => stepMonth(-1));
+elements.nextMonth.addEventListener('click', () => stepMonth(1));
 
 elements.grid.addEventListener('click', (event) => {
   const cell = event.target.closest('button[data-date]');
-  if (cell) selectDate(cell.dataset.date);
+  if (!cell) return;
+
+  if (cell.dataset.date === state.selectedDate) clearSelection();
+  else selectDate(cell.dataset.date);
+});
+
+elements.monthPickerButton.addEventListener('click', () => {
+  if (state.pickerOpen) closeMonthPicker();
+  else openMonthPicker();
+});
+
+elements.previousYear.addEventListener('click', () => shiftPickerYear(-1));
+elements.nextYear.addEventListener('click', () => shiftPickerYear(1));
+
+elements.monthPickerGrid.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-month]');
+  if (!button) return;
+
+  goToMonth(state.pickerYear, Number(button.dataset.month));
+  closeMonthPicker({ restoreFocus: true });
 });
 
 elements.toggleBlock.addEventListener('click', handleToggleBlock);
@@ -334,13 +444,8 @@ elements.blockedList.addEventListener('click', (event) => {
   if (dateButton) {
     const target = fromIsoDate(dateButton.dataset.date);
 
-    state.year = target.getFullYear();
-    state.month = target.getMonth();
-    state.bookedDates = new Set();
-    state.blockedDates = new Set();
-
+    goToMonth(target.getFullYear(), target.getMonth());
     selectDate(dateButton.dataset.date);
-    loadMonth();
   }
 
   if (removeButton) unblockDate(removeButton.dataset.date);
@@ -350,6 +455,22 @@ elements.blockDialog.addEventListener('click', (event) => {
   if (event.target === elements.blockDialog || event.target.closest('[data-dialog-close]')) {
     elements.blockDialog.close();
   }
+});
+
+document.addEventListener('click', (event) => {
+  const path = event.composedPath();
+  const isInside = (selector) => path.some((node) => node instanceof Element && node.matches(selector));
+
+  if (state.pickerOpen && !isInside('.month-picker')) {
+    closeMonthPicker();
+    return;
+  }
+
+  if (state.selectedDate && !isInside(KEEP_SELECTION_AREAS)) clearSelection();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && state.pickerOpen) closeMonthPicker({ restoreFocus: true });
 });
 
 renderCalendar();

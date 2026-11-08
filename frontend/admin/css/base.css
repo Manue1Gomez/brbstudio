@@ -13,6 +13,10 @@
   --color-danger: #e03a36;
   --color-danger-border: #e8a3a1;
   --color-unavailable: #c9cace;
+  --color-past: #f1f1f3;
+  --color-past-text: #9a9aa0;
+  --color-success: #2f8f3a;
+  --color-success-hover: #277a31;
   --color-event: #beecab;
   --color-event-border: #a9dd95;
   --color-event-pending: #fff0c2;
