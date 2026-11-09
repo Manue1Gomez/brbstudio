@@ -9,3 +9,10 @@ export async function postJson(url, payload) {
 
   return { ok: response.ok, status: response.status, data };
 }
+
+export async function getJson(url) {
+  const response = await fetch(url);
+  const data = await response.json().catch(() => ({}));
+
+  return { ok: response.ok, status: response.status, data };
+}
