@@ -1,7 +1,7 @@
 const AppError = require('./appError');
 const bookingModel = require('../models/bookingModel');
 const blockedDateModel = require('../models/blockedDateModel');
-const { CALENDAR_STATUSES } = require('../config/bookingStatus');
+const { CALENDAR_STATUSES, UPCOMING_STATUSES } = require('../config/bookingStatus');
 const { formatMinutes, isValidIsoDate, todayIso } = require('./timeHelper');
 
 const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -65,6 +65,24 @@ async function getDayDetails(date) {
   return { date, blocked, bookings: bookings.map(toBookingSummary) };
 }
 
+async function getPublicDayAvailability(date) {
+  requireDate(date);
+
+  const [bookedServices, blocked] = await Promise.all([
+    bookingModel.findBookedServices(date, UPCOMING_STATUSES),
+    blockedDateModel.exists(date),
+  ]);
+
+  return {
+    date,
+    blocked,
+    booked: bookedServices.map((row) => ({
+      serviceName: row.serviceName,
+      timeLabel: `${formatMinutes(row.startMinutes)} - ${formatMinutes(row.endMinutes)}`,
+    })),
+  };
+}
+
 function listUpcomingBlockedDates() {
   return blockedDateModel.findFrom(todayIso());
 }
@@ -100,6 +118,7 @@ module.exports = {
   getMonthOverview,
   getBlockedDatesInMonth,
   getDayDetails,
+  getPublicDayAvailability,
   listUpcomingBlockedDates,
   blockDate,
   unblockDate,

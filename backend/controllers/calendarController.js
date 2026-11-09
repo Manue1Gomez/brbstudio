@@ -25,6 +25,14 @@ async function getDayDetails(req, res, next) {
   }
 }
 
+async function getPublicDayAvailability(req, res, next) {
+  try {
+    res.json(await calendarService.getPublicDayAvailability(req.query.date));
+  } catch (error) {
+    sendError(error, res, next);
+  }
+}
+
 async function listBlockedDates(req, res, next) {
   try {
     res.json(await calendarService.listUpcomingBlockedDates());
@@ -54,6 +62,7 @@ module.exports = {
   getMonthOverview,
   getBlockedDatesInMonth,
   getDayDetails,
+  getPublicDayAvailability,
   listBlockedDates,
   blockDate,
   unblockDate,
