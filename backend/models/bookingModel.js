@@ -111,6 +111,22 @@ async function findOnDate(date, statuses) {
   return rows;
 }
 
+async function findBookedServices(date, statuses) {
+  const [rows] = await pool.query(
+    `SELECT s.service_name AS serviceName,
+            ${START_MINUTES} AS startMinutes,
+            ${END_MINUTES} AS endMinutes
+       FROM booking b
+       JOIN booking_service bs ON bs.booking_id = b.booking_id
+       JOIN service s ON s.service_id = bs.service_id
+      WHERE b.event_date = ?
+        AND b.status IN (?)
+      ORDER BY b.start_time, s.service_id`,
+    [date, statuses]
+  );
+  return rows;
+}
+
 async function verifySchema() {
   const [booking, bookingService] = await Promise.all([
     findMissingColumnProblems('booking', REQUIRED_BOOKING_COLUMNS),
@@ -131,5 +147,6 @@ module.exports = {
   findScheduleEntries,
   findBookedDates,
   findOnDate,
+  findBookedServices,
   verifySchema,
 };

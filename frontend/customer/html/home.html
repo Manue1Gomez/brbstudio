@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRB Studios | Home</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+
+  <link rel="stylesheet" href="../css/customer-base.css">
+  <link rel="stylesheet" href="../css/site-header.css">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/home-calendar.css">
+</head>
+<body class="home-page">
+
+  <header class="site-header" id="siteHeader">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="#home">
+        <img class="site-header__logo" src="../CustomerImages/brb-logo.png" alt="BRB Studios">
+      </a>
+
+      <nav class="site-header__nav" aria-label="Main">
+        <a class="site-header__link site-header__link--current" href="#home" data-section="home">Home</a>
+        <a class="site-header__link" href="#about" data-section="about">About</a>
+        <a class="site-header__link" href="#contact" data-section="contact">Contact</a>
+      </nav>
+
+      <div class="site-header__account" id="guestLinks">
+        <a class="site-header__link" href="login.html">Login</a>
+        <a class="site-header__button site-header__button--dark" href="register.html">Register</a>
+        <a class="site-header__button" href="login.html" data-book-link>Book</a>
+      </div>
+
+      <div class="site-header__account" id="memberLinks" hidden>
+        <a class="site-header__link site-header__link--accent" href="profile.html">My Profile</a>
+        <a class="site-header__button" href="login.html" data-book-link>Book</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Hair and make up, modeling, photography, and events booking</p>
+        <h1 class="hero__title">Look your best.<br>Be remembered.</h1>
+        <p class="hero__text">
+          BRB Studios brings styling, photography, pageant styling and event planning
+          together so every moment is camera ready
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn-link btn-link--solid" href="login.html" data-book-link>Book a Service</a>
+          <a class="btn-link btn-link--outline" href="#services">Explore Services</a>
+        </div>
+      </div>
+
+      <div class="hero__gallery" role="img" aria-label="BRB Studios storefront">
+        <img class="hero__photo" src="../CustomerImages/storefront-left.jpg" alt="">
+        <img class="hero__photo" src="../CustomerImages/storefront-center.jpg" alt="">
+        <img class="hero__photo" src="../CustomerImages/storefront-right.jpg" alt="">
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section__inner">
+        <p class="section__eyebrow">What we offer</p>
+        <h2 class="section__title">Our Services</h2>
+
+        <p class="services__status" id="serviceStatus" role="status">Loading services...</p>
+        <ul class="services__grid" id="serviceList"></ul>
+      </div>
+    </section>
+
+    <section class="section" id="calendar">
+      <div class="section__inner">
+        <h2 class="section__title">Check The Calendar</h2>
+
+        <div class="availability">
+          <div class="calendar">
+            <div class="calendar__header">
+              <button class="calendar__nav calendar__nav--prev" id="calendarPrev" type="button" aria-label="Previous month"></button>
+              <p class="calendar__month" id="calendarMonth" aria-live="polite"></p>
+              <button class="calendar__nav calendar__nav--next" id="calendarNext" type="button" aria-label="Next month"></button>
+            </div>
+
+            <div class="calendar__weekdays" aria-hidden="true">
+              <span>Sun</span>
+              <span>Mon</span>
+              <span>Tues</span>
+              <span>Wed</span>
+              <span>Thurs</span>
+              <span>Fri</span>
+              <span>Sat</span>
+            </div>
+
+            <div class="calendar__days" id="calendarDays"></div>
+            <p class="calendar__status" id="calendarStatus" role="status" hidden></p>
+          </div>
+
+          <div class="day-panel">
+            <h3 class="day-panel__date" id="dayHeading">Select a date</h3>
+
+            <p class="day-panel__status" id="dayStatus" role="status">Choose a date on the calendar to see its bookings.</p>
+            <ul class="day-panel__list" id="dayList"></ul>
+
+            <a class="btn-link btn-link--solid day-panel__book" id="dayBookLink" href="login.html" hidden>Book on this date</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section__inner">
+        <div class="about">
+          <div class="about__text">
+            <h2 class="section__title">Where every look becomes a memory</h2>
+            <p>
+              BRB Studios is a creative studio owned by John Roy Marasigan. We bring hair
+              and make-up, modeling, photography, styling, pageant coaching and event
+              planning together, so every moment is camera-ready.
+            </p>
+            <p>
+              Booking used to mean long message threads. Now you can pick your services,
+              check the calendar and send your request online.
+            </p>
+
+            <div class="hero__actions">
+              <a class="btn-link btn-link--solid" href="login.html" data-book-link>Book a service</a>
+              <a class="btn-link btn-link--outline" href="#contact">Contact Us</a>
+            </div>
+          </div>
+
+          <img class="about__photo about__photo--studio" src="../CustomerImages/studio-interior.jpg" alt="Inside BRB Studios">
+          <img class="about__photo about__photo--voucher" src="../CustomerImages/gift-voucher.jpg" alt="BRB Studios gift vouchers">
+        </div>
+
+        <ol class="steps">
+          <li class="steps__item">
+            <p class="steps__number">Step 1</p>
+            <h3 class="steps__title">Choose a service</h3>
+            <p class="steps__text">Pick one or more services in one booking</p>
+          </li>
+          <li class="steps__item">
+            <p class="steps__number">Step 2</p>
+            <h3 class="steps__title">Pick a date and time</h3>
+            <p class="steps__text">See open and booked dates before you decide</p>
+          </li>
+          <li class="steps__item">
+            <p class="steps__number">Step 3</p>
+            <h3 class="steps__title">Waiting for approval</h3>
+            <p class="steps__text">The studio checks your schedule and accepts your request</p>
+          </li>
+          <li class="steps__item">
+            <p class="steps__number">Step 4</p>
+            <h3 class="steps__title">Pay and get confirmed</h3>
+            <p class="steps__text">Send your downpayment and receive your confirmation</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="section__inner contact">
+        <p class="section__eyebrow">Get In Touch</p>
+        <h2 class="section__title">Contact Us</h2>
+        <p class="section__subtitle">Reach BRB Studio through any of these</p>
+
+        <ul class="contact__list">
+          <li class="contact__item">
+            <span class="contact__icon contact__icon--location" aria-hidden="true"></span>
+            <div>
+              <p class="contact__label">BRB Studio Address</p>
+              <p class="contact__value">Marasigan St. Poblacion 4, Calaca City, Calaca, Philippines, 4212</p>
+            </div>
+          </li>
+          <li class="contact__item">
+            <span class="contact__icon contact__icon--phone" aria-hidden="true"></span>
+            <div>
+              <p class="contact__label">BRB Studio Contact Number</p>
+              <p class="contact__value"><a href="tel:+639051738581">0905 173 8581</a></p>
+            </div>
+          </li>
+          <li class="contact__item">
+            <span class="contact__icon contact__icon--mail" aria-hidden="true"></span>
+            <div>
+              <p class="contact__label">BRB Studio Email</p>
+              <p class="contact__value"><a href="mailto:inquiry.teambrb@gmail.com">inquiry.teambrb@gmail.com</a></p>
+            </div>
+          </li>
+          <li class="contact__item">
+            <span class="contact__icon contact__icon--facebook" aria-hidden="true"></span>
+            <div>
+              <p class="contact__label">BRB Studio Facebook</p>
+              <p class="contact__value">BRB Studios</p>
+            </div>
+          </li>
+          <li class="contact__item">
+            <span class="contact__icon contact__icon--clock" aria-hidden="true"></span>
+            <div>
+              <p class="contact__label">BRB Studio Hours</p>
+              <p class="contact__value">Monday - Sunday 7:00AM - 7:00PM</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <template id="serviceCardTemplate">
+    <li class="service-card">
+      <div class="service-card__media">
+        <img class="service-card__image" alt="">
+      </div>
+      <div class="service-card__body">
+        <h3 class="service-card__name"></h3>
+        <p class="service-card__description"></p>
+        <a class="btn-link btn-link--dark service-card__book" href="login.html">Book this service</a>
+      </div>
+    </li>
+  </template>
+
+  <template id="bookedRowTemplate">
+    <li class="day-panel__row">
+      <div>
+        <p class="day-panel__service"></p>
+        <p class="day-panel__time"></p>
+      </div>
+      <span class="day-panel__badge">Booked</span>
+    </li>
+  </template>
+
+  <script type="module" src="../js/site-header.js"></script>
+  <script type="module" src="../js/home.js"></script>
+  <script type="module" src="../js/home-calendar.js"></script>
+</body>
+</html>

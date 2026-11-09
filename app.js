@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => res.redirect('/customer/html/index.html'));
+app.get('/', (req, res) => res.redirect('/customer/html/home.html'));
 app.get('/admin', (req, res) => res.redirect('/admin/html/dashboard.html'));
 
 app.use('/api/auth', authRoutes);

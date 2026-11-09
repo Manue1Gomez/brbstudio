@@ -1,27 +1,21 @@
 import { getJson } from './api.js';
+import { bookingUrl, loadCustomer } from './session.js';
 
+const header = document.getElementById('siteHeader');
 const serviceList = document.getElementById('serviceList');
 const serviceStatus = document.getElementById('serviceStatus');
 const cardTemplate = document.getElementById('serviceCardTemplate');
+const sectionLinks = document.querySelectorAll('[data-section]');
+const aboutSection = document.getElementById('about');
+const contactSection = document.getElementById('contact');
 
-function formatPrice(price) {
-  const decimals = Number.isInteger(price) ? 0 : 2;
-
-  return new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(price);
-}
-
-function buildCard(service) {
+function buildCard(service, customer) {
   const card = cardTemplate.content.firstElementChild.cloneNode(true);
   const image = card.querySelector('.service-card__image');
 
   card.querySelector('.service-card__name').textContent = service.name;
   card.querySelector('.service-card__description').textContent = service.description;
-  card.querySelector('.service-card__price-value').textContent = formatPrice(service.price);
+  card.querySelector('.service-card__book').setAttribute('href', bookingUrl(customer, { service: service.id }));
 
   if (service.imageUrl) {
     image.src = service.imageUrl;
@@ -40,7 +34,7 @@ function showStatus(text) {
 
 async function loadServices() {
   try {
-    const { ok, data } = await getJson('/api/services');
+    const [{ ok, data }, customer] = await Promise.all([getJson('/api/services'), loadCustomer()]);
 
     if (!ok) {
       showStatus('Services could not be loaded. Please refresh the page.');
@@ -52,11 +46,32 @@ async function loadServices() {
       return;
     }
 
-    serviceList.replaceChildren(...data.map(buildCard));
+    serviceList.replaceChildren(...data.map((service) => buildCard(service, customer)));
     serviceStatus.hidden = true;
   } catch {
     showStatus('Unable to reach the server. Please check your connection and try again.');
   }
 }
 
+function findCurrentSection() {
+  const reachedBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  const threshold = header.offsetHeight + window.innerHeight * 0.3;
+
+  if (reachedBottom || contactSection.getBoundingClientRect().top <= threshold) return 'contact';
+  if (aboutSection.getBoundingClientRect().top <= threshold) return 'about';
+  return 'home';
+}
+
+function highlightCurrentSection() {
+  const current = findCurrentSection();
+
+  sectionLinks.forEach((link) => {
+    link.classList.toggle('site-header__link--current', link.dataset.section === current);
+  });
+}
+
+window.addEventListener('scroll', highlightCurrentSection, { passive: true });
+window.addEventListener('resize', highlightCurrentSection);
+
+highlightCurrentSection();
 loadServices();

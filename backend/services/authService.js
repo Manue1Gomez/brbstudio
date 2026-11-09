@@ -6,7 +6,7 @@ const SALT_ROUNDS = 10;
 const MYSQL_DUPLICATE_ENTRY = 'ER_DUP_ENTRY';
 
 const LOGIN_PAGE = '/customer/html/login.html';
-const CUSTOMER_HOME = '/customer/html/index.html';
+const CUSTOMER_HOME = '/customer/html/home.html';
 
 const NAME_PATTERN = /^\p{L}[\p{L} .'-]*$/u;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
