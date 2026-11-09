@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRB Studios | Home</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+
+  <link rel="stylesheet" href="../css/customer-base.css">
+  <link rel="stylesheet" href="../css/site-header.css">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+<body class="home-page">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="index.html">
+        <img class="site-header__logo" src="../CustomerImages/brb-logo.png" alt="BRB Studios">
+      </a>
+
+      <nav class="site-header__nav" aria-label="Main">
+        <a class="site-header__link site-header__link--current" href="index.html" aria-current="page">Home</a>
+        <a class="site-header__link" href="#about">About</a>
+        <a class="site-header__link" href="#contact">Contact</a>
+
+        <div class="site-header__account" id="guestLinks">
+          <a class="site-header__link" href="login.html">Login</a>
+          <a class="site-header__button" href="register.html">Register</a>
+        </div>
+
+        <div class="site-header__account" id="memberLinks" hidden>
+          <a class="site-header__link site-header__link--accent" href="profile.html">My Profile</a>
+          <button class="site-header__button site-header__button--outline" id="logoutButton" type="button">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow">BRB Studios &middot; Calaca City, Batangas</p>
+        <h1 class="hero__title">Book your next look with BRB Studios</h1>
+        <p class="hero__text">
+          Hair and makeup, modeling, photography, event planning and pageant training,
+          all in one studio. Pick your services and send your booking request online.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn-link btn-link--solid" href="login.html" data-book-link>Book a Service</a>
+          <a class="btn-link btn-link--outline" href="#services">View Services</a>
+        </div>
+      </div>
+
+      <div class="hero__gallery" role="img" aria-label="BRB Studios storefront">
+        <img class="hero__photo" src="../CustomerImages/storefront-left.jpg" alt="">
+        <img class="hero__photo" src="../CustomerImages/storefront-center.jpg" alt="">
+        <img class="hero__photo" src="../CustomerImages/storefront-right.jpg" alt="">
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section__inner">
+        <h2 class="section__title">Our Services</h2>
+        <p class="section__subtitle">You can book more than one service at once.</p>
+
+        <p class="services__status" id="serviceStatus" role="status">Loading services...</p>
+        <ul class="services__grid" id="serviceList"></ul>
+
+        <div class="services__footer">
+          <a class="btn-link btn-link--solid" href="login.html" data-book-link>Book a Service</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tinted" id="about">
+      <div class="section__inner about">
+        <div class="about__text">
+          <h2 class="section__title">About BRB Studios</h2>
+          <p>
+            BRB Studios is a service-based studio owned and managed by John Roy Marasigan.
+            It offers Hair and Makeup, Modeling Workshop, Photography, Event Planning,
+            Event Coordination, and Pageant Training and Styling for individual clients
+            and events.
+          </p>
+          <p>
+            Bookings are not confirmed automatically. Every request is reviewed by the
+            studio first, and you can follow its status from your account.
+          </p>
+        </div>
+
+        <ul class="about__facts">
+          <li class="about__fact">
+            <span class="about__figure">2012</span>
+            <span class="about__label">The owner started providing these services</span>
+          </li>
+          <li class="about__fact">
+            <span class="about__figure">2025</span>
+            <span class="about__label">BRB Studios established its physical studio</span>
+          </li>
+          <li class="about__fact">
+            <span class="about__figure">Calaca City</span>
+            <span class="about__label">Batangas</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="section__inner contact">
+        <h2 class="section__title">Contact</h2>
+        <p class="contact__text">
+          Visit the studio in Calaca City, Batangas, or create an account to send a booking
+          request without having to call or message first.
+        </p>
+
+        <div class="hero__actions" data-guest-only>
+          <a class="btn-link btn-link--solid" href="register.html">Create an Account</a>
+          <a class="btn-link btn-link--outline" href="login.html">Login</a>
+        </div>
+
+        <div class="hero__actions" data-member-only hidden>
+          <a class="btn-link btn-link--solid" href="login.html" data-book-link>Book a Service</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 BRB Studios. All rights reserved.</p>
+  </footer>
+
+  <template id="serviceCardTemplate">
+    <li class="service-card">
+      <div class="service-card__media">
+        <img class="service-card__image" alt="">
+      </div>
+      <div class="service-card__body">
+        <h3 class="service-card__name"></h3>
+        <p class="service-card__description"></p>
+        <p class="service-card__price">
+          <span class="service-card__price-label">Price</span>
+          <span class="service-card__price-value"></span>
+        </p>
+      </div>
+    </li>
+  </template>
+
+  <script type="module" src="../js/site-header.js"></script>
+  <script type="module" src="../js/home.js"></script>
+</body>
+</html>
