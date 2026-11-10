@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS payment (
+  payment_id        INT           NOT NULL AUTO_INCREMENT,
+  booking_id        INT           NOT NULL,
+  payment_type      ENUM('Downpayment','Balance') NOT NULL,
+  amount            DECIMAL(10,2) NOT NULL,
+  method            ENUM('GCash','Cash') NOT NULL,
+  reference_number  VARCHAR(50)   NULL DEFAULT NULL,
+  proof_path        VARCHAR(255)  NULL DEFAULT NULL,
+  status            ENUM('Pending','Verified','Rejected') NOT NULL DEFAULT 'Pending',
+  reject_reason     VARCHAR(255)  NULL DEFAULT NULL,
+  note              VARCHAR(255)  NULL DEFAULT NULL,
+  recorded_by       ENUM('Customer','Admin') NOT NULL DEFAULT 'Customer',
+  submitted_at      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  reviewed_at       TIMESTAMP     NULL DEFAULT NULL,
+  receipt_sent_at   TIMESTAMP     NULL DEFAULT NULL,
+  updated_at        TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (payment_id),
+  KEY idx_payment_booking (booking_id),
+  KEY idx_payment_status (status, submitted_at),
+  CONSTRAINT fk_payment_booking FOREIGN KEY (booking_id) REFERENCES booking (booking_id) ON DELETE CASCADE,
+  CONSTRAINT chk_payment_amount CHECK (amount > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

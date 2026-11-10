@@ -29,4 +29,20 @@ function isValidIsoDate(value) {
   return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
 }
 
-module.exports = { formatMinutes, toIsoDate, todayIso, isValidIsoDate };
+function timeTextToMinutes(text) {
+  const [hours, minutes] = text.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+function formatTimeRange(startMinutes, endMinutes) {
+  return `${formatMinutes(startMinutes)} - ${formatMinutes(endMinutes)}`;
+}
+
+module.exports = {
+  formatMinutes,
+  formatTimeRange,
+  timeTextToMinutes,
+  toIsoDate,
+  todayIso,
+  isValidIsoDate,
+};

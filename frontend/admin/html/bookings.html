@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Bookings | BRB Studios Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/bookings.css">
+</head>
+<body class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__logo" src="../AdminImages/brb-logo.png" alt="BRB Studios">
+      <p class="sidebar__role">Administrator</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Admin navigation">
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link" href="dashboard.html">
+            <span class="nav-link__icon nav-link__icon--dashboard" aria-hidden="true"></span>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="payments.html">
+            <span class="nav-link__icon nav-link__icon--payments" aria-hidden="true"></span>
+            Payments
+          </a>
+        </li>
+        <li>
+          <a class="nav-link nav-link--active" href="bookings.html" aria-current="page">
+            <span class="nav-link__icon nav-link__icon--bookings" aria-hidden="true"></span>
+            Bookings
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="calendar.html">
+            <span class="nav-link__icon nav-link__icon--calendar" aria-hidden="true"></span>
+            Calendar
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="services.html">
+            <span class="nav-link__icon nav-link__icon--services" aria-hidden="true"></span>
+            Services
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="clients.html">
+            <span class="nav-link__icon nav-link__icon--clients" aria-hidden="true"></span>
+            Clients
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="vouchers.html">
+            <span class="nav-link__icon nav-link__icon--vouchers" aria-hidden="true"></span>
+            Vouchers
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reschedule-requests.html">
+            <span class="nav-link__icon nav-link__icon--reschedule" aria-hidden="true"></span>
+            Rescheduling Requests
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reports.html">
+            <span class="nav-link__icon nav-link__icon--reports" aria-hidden="true"></span>
+            Reports
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a class="sidebar__new-booking" href="new-booking.html">New Booking</a>
+      <a class="sidebar__logout" href="../../customer/html/login.html">
+        <span class="sidebar__logout-icon" aria-hidden="true"></span>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="page-header">
+      <p class="page-header__eyebrow">Operations</p>
+      <h1 class="page-header__title">All Bookings</h1>
+      <p class="page-header__subtitle">Accept requests, follow payments and manage every booking in one place.</p>
+    </header>
+
+    <section class="panel filter-bar" aria-label="Search and filters">
+      <label class="search-field">
+        <span class="visually-hidden">Search by customer or reference</span>
+        <span class="search-field__icon" aria-hidden="true"></span>
+        <input class="field__input search-field__input" id="searchInput" type="search" placeholder="Search customer or reference" autocomplete="off">
+      </label>
+
+      <label class="filter-bar__item">
+        <span class="visually-hidden">Service</span>
+        <select class="field__input" id="serviceFilter">
+          <option value="">All Services</option>
+        </select>
+      </label>
+
+      <label class="filter-bar__item">
+        <span class="visually-hidden">Event date</span>
+        <input class="field__input" id="dateFilter" type="date">
+      </label>
+
+      <button class="filter-bar__clear" type="button" id="clearFilters" hidden>Clear filters</button>
+    </section>
+
+    <div class="status-tabs" id="statusTabs" role="group" aria-label="Filter by status">
+      <button class="status-tab status-tab--active" type="button" data-status="all" aria-pressed="true">All <span class="status-tab__count">0</span></button>
+      <button class="status-tab" type="button" data-status="Pending" aria-pressed="false">Pending <span class="status-tab__count">0</span></button>
+      <button class="status-tab" type="button" data-status="To Pay" aria-pressed="false">To Pay <span class="status-tab__count">0</span></button>
+      <button class="status-tab" type="button" data-status="Confirmed" aria-pressed="false">Confirmed <span class="status-tab__count">0</span></button>
+      <button class="status-tab" type="button" data-status="Completed" aria-pressed="false">Completed <span class="status-tab__count">0</span></button>
+      <button class="status-tab" type="button" data-status="Rejected" aria-pressed="false">Rejected <span class="status-tab__count">0</span></button>
+    </div>
+
+    <div class="table-wrap" id="bookingWrap" hidden>
+      <table class="data-table bookings-table" aria-label="Bookings">
+        <thead>
+          <tr>
+            <th scope="col">Customer</th>
+            <th scope="col">Service</th>
+            <th scope="col">Date and Time</th>
+            <th scope="col">Payment</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bookingBody"></tbody>
+      </table>
+    </div>
+    <p class="status-message bookings-status" id="bookingStatus" role="status">Loading bookings...</p>
+
+    <footer class="pagination" id="pagination" hidden>
+      <p class="pagination__summary" id="pageSummary"></p>
+      <div class="pagination__buttons">
+        <button class="btn" type="button" id="previousPage">Previous</button>
+        <button class="btn btn--lg" type="button" id="nextPage">View Next</button>
+      </div>
+    </footer>
+  </main>
+
+  <dialog class="dialog dialog--wide" id="viewDialog" aria-labelledby="viewTitle">
+    <div class="dialog__form">
+      <header class="dialog__header">
+        <div>
+          <p class="dialog__eyebrow" id="viewReference"></p>
+          <h2 class="dialog__title" id="viewTitle"></h2>
+        </div>
+        <span class="pill" id="viewStatus"></span>
+      </header>
+
+      <div class="view-grid">
+        <section>
+          <h3 class="view-section__title">Customer</h3>
+          <dl class="detail-list" id="viewCustomer"></dl>
+        </section>
+        <section>
+          <h3 class="view-section__title">Schedule</h3>
+          <dl class="detail-list" id="viewSchedule"></dl>
+        </section>
+      </div>
+
+      <section>
+        <h3 class="view-section__title">Services and payment</h3>
+        <table class="mini-table">
+          <tbody id="viewServices"></tbody>
+          <tfoot id="viewTotals"></tfoot>
+        </table>
+      </section>
+
+      <section>
+        <h3 class="view-section__title">Payment history</h3>
+        <ul class="payment-history" id="viewPayments"></ul>
+        <p class="status-message" id="viewNoPayments" hidden>No payments yet.</p>
+      </section>
+
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Close</button>
+        <button class="btn" type="button" id="viewContractButton"><span class="btn__icon btn__icon--file" aria-hidden="true"></span>Contract</button>
+        <button class="btn btn--primary" type="button" id="viewUpdateButton"><span class="btn__icon btn__icon--edit" aria-hidden="true"></span>Update</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="updateDialog" aria-labelledby="updateTitle">
+    <form class="dialog__form" id="updateForm" novalidate>
+      <div>
+        <p class="dialog__eyebrow" id="updateReference"></p>
+        <h2 class="dialog__title" id="updateTitle">Update booking</h2>
+      </div>
+      <p class="alert alert--error" role="alert" hidden></p>
+
+      <div class="field">
+        <label class="field__label" for="updateStatus">Status</label>
+        <select class="field__input" id="updateStatus" name="status"></select>
+        <p class="field__hint" id="updateStatusHint"></p>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label" for="updateDate">Event date</label>
+          <input class="field__input" id="updateDate" name="eventDate" type="date" required>
+          <p class="field__error" hidden></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="updateStart">Start time</label>
+          <input class="field__input" id="updateStart" name="startTime" type="time" required>
+          <p class="field__error" hidden></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="updateEnd">End time</label>
+          <input class="field__input" id="updateEnd" name="endTime" type="time" required>
+          <p class="field__error" hidden></p>
+        </div>
+      </div>
+      <p class="field__hint" id="updateScheduleHint"></p>
+
+      <div class="field">
+        <label class="field__label" for="updateAddress">Event address (optional)</label>
+        <textarea class="field__input" id="updateAddress" name="eventAddress" rows="2" maxlength="255"></textarea>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--primary" type="submit" id="saveUpdateButton">Save changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="confirmDialog" aria-labelledby="confirmTitle">
+    <div class="dialog__form">
+      <h2 class="dialog__title" id="confirmTitle"></h2>
+      <p class="dialog__text" id="confirmMessage"></p>
+      <p class="alert alert--error" id="confirmError" role="alert" hidden></p>
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn" type="button" id="confirmButton"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <template id="groupRowTemplate">
+    <tr class="group-row">
+      <th scope="colgroup" colspan="6"><span class="group-row__label"></span><span class="group-row__count"></span></th>
+    </tr>
+  </template>
+
+  <template id="bookingRowTemplate">
+    <tr class="data-row">
+      <td class="bookings-table__customer">
+        <strong class="bookings-table__name"></strong>
+        <span class="bookings-table__reference"></span>
+      </td>
+      <td class="bookings-table__services"></td>
+      <td class="bookings-table__when">
+        <span class="bookings-table__date"></span>
+        <span class="bookings-table__time"></span>
+      </td>
+      <td class="bookings-table__payment">
+        <span class="bookings-table__amounts"></span>
+        <div class="progress"><div class="progress__bar"></div></div>
+        <span class="bookings-table__payment-label"></span>
+        <a class="bookings-table__review-link" href="payments.html" hidden>Payment to review</a>
+      </td>
+      <td class="bookings-table__status">
+        <span class="pill"></span>
+        <div class="quick-actions" hidden>
+          <button class="btn btn--sm btn--success" type="button" data-action="accept">Accept</button>
+          <button class="btn btn--sm btn--danger" type="button" data-action="decline">Decline</button>
+        </div>
+      </td>
+      <td>
+        <div class="row-actions row-actions--nowrap">
+          <button class="btn btn--sm" type="button" data-action="view"><span class="btn__icon btn__icon--eye" aria-hidden="true"></span>View</button>
+          <button class="icon-button icon-button--contract" type="button" data-action="contract" title="Contract"></button>
+          <button class="icon-button icon-button--update" type="button" data-action="update" title="Update"></button>
+          <button class="icon-button icon-button--danger icon-button--delete" type="button" data-action="delete" title="Delete"></button>
+        </div>
+      </td>
+    </tr>
+  </template>
+
+  <script type="module" src="../js/bookings.js"></script>
+</body>
+</html>

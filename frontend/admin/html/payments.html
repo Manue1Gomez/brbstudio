@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments | BRB Studios Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/payments.css">
+</head>
+<body class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__logo" src="../AdminImages/brb-logo.png" alt="BRB Studios">
+      <p class="sidebar__role">Administrator</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Admin navigation">
+      <ul class="nav-list">
+        <li>
+          <a class="nav-link" href="dashboard.html">
+            <span class="nav-link__icon nav-link__icon--dashboard" aria-hidden="true"></span>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="nav-link nav-link--active" href="payments.html" aria-current="page">
+            <span class="nav-link__icon nav-link__icon--payments" aria-hidden="true"></span>
+            Payments
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="bookings.html">
+            <span class="nav-link__icon nav-link__icon--bookings" aria-hidden="true"></span>
+            Bookings
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="calendar.html">
+            <span class="nav-link__icon nav-link__icon--calendar" aria-hidden="true"></span>
+            Calendar
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="services.html">
+            <span class="nav-link__icon nav-link__icon--services" aria-hidden="true"></span>
+            Services
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="clients.html">
+            <span class="nav-link__icon nav-link__icon--clients" aria-hidden="true"></span>
+            Clients
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="vouchers.html">
+            <span class="nav-link__icon nav-link__icon--vouchers" aria-hidden="true"></span>
+            Vouchers
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reschedule-requests.html">
+            <span class="nav-link__icon nav-link__icon--reschedule" aria-hidden="true"></span>
+            Rescheduling Requests
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="reports.html">
+            <span class="nav-link__icon nav-link__icon--reports" aria-hidden="true"></span>
+            Reports
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a class="sidebar__new-booking" href="new-booking.html">New Booking</a>
+      <a class="sidebar__logout" href="../../customer/html/login.html">
+        <span class="sidebar__logout-icon" aria-hidden="true"></span>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="page-header">
+      <p class="page-header__eyebrow">Finance</p>
+      <h1 class="page-header__title">Payments</h1>
+      <p class="page-header__subtitle">Review submitted payment proofs and keep track of unpaid balances.</p>
+    </header>
+
+    <section class="payments-section" aria-labelledby="reviewTitle">
+      <h2 class="section-heading" id="reviewTitle">Payments to review <span class="section-heading__count" id="reviewCount"></span></h2>
+      <div class="review-grid" id="reviewGrid"></div>
+      <p class="status-message" id="reviewStatus" role="status">Loading payments...</p>
+    </section>
+
+    <section class="payments-section" aria-labelledby="outstandingTitle">
+      <header class="payments-section__header">
+        <h2 class="section-heading" id="outstandingTitle">Outstanding balances</h2>
+        <p class="payments-section__summary" id="outstandingSummary"></p>
+      </header>
+
+      <div class="table-wrap" id="outstandingWrap" hidden>
+        <table class="data-table outstanding-table" aria-labelledby="outstandingTitle">
+          <thead>
+            <tr>
+              <th scope="col">Booking</th>
+              <th scope="col">Service</th>
+              <th scope="col">Event Date</th>
+              <th scope="col">Paid / Total</th>
+              <th scope="col">Balance</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="outstandingBody"></tbody>
+        </table>
+      </div>
+      <p class="status-message" id="outstandingStatus" role="status">Loading balances...</p>
+    </section>
+  </main>
+
+  <dialog class="dialog dialog--proof" id="proofDialog" aria-labelledby="proofTitle">
+    <div class="dialog__form">
+      <header class="dialog__header">
+        <h2 class="dialog__title" id="proofTitle">Payment proof</h2>
+        <button class="icon-button icon-button--close" type="button" data-dialog-close aria-label="Close"></button>
+      </header>
+      <img class="proof-image" id="proofImage" alt="Uploaded payment proof">
+      <p class="proof-caption" id="proofCaption"></p>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="verifyDialog" aria-labelledby="verifyTitle">
+    <div class="dialog__form">
+      <h2 class="dialog__title" id="verifyTitle">Verify this payment?</h2>
+      <dl class="detail-list" id="verifyDetails"></dl>
+      <p class="alert alert--warning" id="verifyWarning" hidden></p>
+      <p class="dialog__text" id="verifyEmailNote"></p>
+      <p class="alert alert--error" id="verifyError" role="alert" hidden></p>
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--primary" type="button" id="confirmVerifyButton">Verify payment</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="rejectDialog" aria-labelledby="rejectTitle">
+    <form class="dialog__form" id="rejectForm" novalidate>
+      <h2 class="dialog__title" id="rejectTitle">Reject this payment?</h2>
+      <p class="dialog__text" id="rejectMessage"></p>
+      <p class="alert alert--error" role="alert" hidden></p>
+      <div class="field">
+        <label class="field__label" for="rejectReason">Reason (shown to the customer)</label>
+        <textarea class="field__input" id="rejectReason" name="reason" rows="3" maxlength="255" placeholder="e.g. The screenshot is blurry. Please upload a clear copy." required></textarea>
+        <p class="field__error" hidden></p>
+      </div>
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--danger-solid" type="submit" id="confirmRejectButton">Reject payment</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="recordDialog" aria-labelledby="recordTitle">
+    <form class="dialog__form" id="recordForm" novalidate>
+      <h2 class="dialog__title" id="recordTitle">Record a payment</h2>
+      <p class="dialog__text" id="recordSummary"></p>
+      <p class="alert alert--error" role="alert" hidden></p>
+
+      <div class="field">
+        <label class="field__label" for="recordAmount">Amount received</label>
+        <div class="input-group">
+          <span class="input-group__prefix" aria-hidden="true">&#8369;</span>
+          <input class="field__input" id="recordAmount" name="amount" type="text" inputmode="decimal" placeholder="0" required>
+        </div>
+        <button class="field__shortcut" type="button" id="fillBalanceButton"></button>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="recordMethod">Received through</label>
+        <select class="field__input" id="recordMethod" name="method">
+          <option value="Cash">Cash</option>
+          <option value="GCash">GCash</option>
+        </select>
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="recordNote">Note (optional)</label>
+        <input class="field__input" id="recordNote" name="note" type="text" maxlength="255" placeholder="e.g. Paid at the studio">
+        <p class="field__error" hidden></p>
+      </div>
+
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--primary" type="submit" id="confirmRecordButton">Record payment</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="fullDialog" aria-labelledby="fullTitle">
+    <form class="dialog__form" id="fullForm" novalidate>
+      <h2 class="dialog__title" id="fullTitle">Mark as fully paid?</h2>
+      <p class="dialog__text" id="fullMessage"></p>
+      <p class="alert alert--error" role="alert" hidden></p>
+      <div class="field">
+        <label class="field__label" for="fullMethod">Received through</label>
+        <select class="field__input" id="fullMethod" name="method">
+          <option value="Cash">Cash</option>
+          <option value="GCash">GCash</option>
+        </select>
+        <p class="field__error" hidden></p>
+      </div>
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn btn--success" type="submit" id="confirmFullButton">Mark as fully paid</button>
+      </div>
+    </form>
+  </dialog>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <template id="reviewCardTemplate">
+    <article class="panel review-card">
+      <button class="review-card__proof" type="button" data-action="zoom" aria-label="Enlarge payment proof">
+        <img class="review-card__image" alt="Payment proof" hidden>
+        <span class="review-card__empty">No proof uploaded</span>
+        <span class="review-card__expand" aria-hidden="true"></span>
+      </button>
+
+      <div class="review-card__body">
+        <p class="review-card__reference"></p>
+        <h3 class="review-card__name"></h3>
+        <p class="review-card__services"></p>
+
+        <dl class="review-card__amounts">
+          <div><dt>Amount due</dt><dd data-field="total"></dd></div>
+          <div><dt data-field="amountLabel">Downpayment</dt><dd data-field="amount"></dd></div>
+          <div><dt>Balance</dt><dd data-field="balance"></dd></div>
+        </dl>
+
+        <p class="review-card__meta"></p>
+        <p class="review-card__warning" hidden></p>
+
+        <div class="review-card__actions">
+          <button class="btn btn--primary" type="button" data-action="verify">Verify</button>
+          <button class="btn" type="button" data-action="reject">Reject</button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <template id="outstandingRowTemplate">
+    <tr class="data-row">
+      <td class="outstanding-table__booking">
+        <strong class="outstanding-table__customer"></strong>
+        <span class="outstanding-table__reference"></span>
+      </td>
+      <td class="outstanding-table__services"></td>
+      <td>
+        <span class="outstanding-table__date"></span>
+        <span class="outstanding-table__time"></span>
+        <span class="tag tag--overdue" hidden>Overdue</span>
+      </td>
+      <td class="outstanding-table__paid">
+        <span class="outstanding-table__amounts"></span>
+        <div class="progress"><div class="progress__bar"></div></div>
+        <span class="tag outstanding-table__note"></span>
+      </td>
+      <td class="outstanding-table__balance"></td>
+      <td>
+        <div class="row-actions">
+          <button class="btn btn--sm" type="button" data-action="record">Record Payment</button>
+          <button class="btn btn--sm btn--success" type="button" data-action="full">Mark Fully Paid</button>
+        </div>
+      </td>
+    </tr>
+  </template>
+
+  <script type="module" src="../js/payments.js"></script>
+</body>
+</html>

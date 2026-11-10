@@ -9,12 +9,15 @@ const customerModel = require('./backend/models/customerModel');
 const serviceModel = require('./backend/models/serviceModel');
 const bookingModel = require('./backend/models/bookingModel');
 const blockedDateModel = require('./backend/models/blockedDateModel');
+const paymentModel = require('./backend/models/paymentModel');
 const authRoutes = require('./backend/routes/authRoutes');
 const dashboardRoutes = require('./backend/routes/dashboardRoutes');
 const serviceRoutes = require('./backend/routes/serviceRoutes');
 const adminServiceRoutes = require('./backend/routes/adminServiceRoutes');
 const calendarRoutes = require('./backend/routes/calendarRoutes');
 const adminCalendarRoutes = require('./backend/routes/adminCalendarRoutes');
+const adminPaymentRoutes = require('./backend/routes/adminPaymentRoutes');
+const adminBookingRoutes = require('./backend/routes/adminBookingRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +41,8 @@ app.use('/api/calendar', calendarRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/services', adminServiceRoutes);
 app.use('/api/admin/calendar', adminCalendarRoutes);
+app.use('/api/admin/payments', adminPaymentRoutes);
+app.use('/api/admin/bookings', adminBookingRoutes);
 
 app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Endpoint not found.' });
@@ -65,6 +70,7 @@ app.listen(PORT, async () => {
       ...(await serviceModel.verifySchema()),
       ...(await bookingModel.verifySchema()),
       ...(await blockedDateModel.verifySchema()),
+      ...(await paymentModel.verifySchema()),
     ];
     problems.forEach((problem) => console.warn(`Database warning: ${problem}`));
   } catch (error) {
