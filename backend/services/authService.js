@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const customerModel = require('../models/customerModel');
 const AppError = require('./appError');
-
 const SALT_ROUNDS = 10;
 const MYSQL_DUPLICATE_ENTRY = 'ER_DUP_ENTRY';
+<<<<<<< HEAD
 
 const LOGIN_PAGE    = '/customer/html/login.html';
 const CUSTOMER_HOME = '/customer/html/login.html';
@@ -13,6 +13,12 @@ const EMAIL_PATTERN   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONTACT_PATTERN = /^09\d{9}$/;
 
 const DUMMY_HASH = bcrypt.hashSync('not-a-real-password', SALT_ROUNDS);
+=======
+const LOGIN_PAGE = '/customer/html/login.html';
+const NAME_PATTERN    = /^\p{L}[\p{L} .'-]*$/u;
+const EMAIL_PATTERN   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTACT_PATTERN = /^09\d{9}$/;
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3
 const asText = (value) => String(value ?? '');
 
 function normalizeRegistration(body = {}) {
@@ -37,12 +43,18 @@ function validatePassword(password) {
   if (!password) return 'Password is required.';
   if (password.length < 8) return 'Password must be at least 8 characters.';
   if (password.length > 72) return 'Password must be 72 characters or fewer.';
+<<<<<<< HEAD
   if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) return 'Password must contain at least one letter and one number.';
+=======
+  if (!/[A-Za-z]/.test(password) || !/\d/.test(password))
+    return 'Password must contain at least one letter and one number.';
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3
   return null;
 }
 
 function validateRegistration(data) {
   const errors = {
+<<<<<<< HEAD
     firstName:       validateName(data.firstName, 'First name'),
     lastName:        validateName(data.lastName, 'Last name'),
     email:           null,
@@ -56,8 +68,29 @@ function validateRegistration(data) {
 
   if (!data.contactNumber) errors.contactNumber = 'Contact number is required.';
   else if (!CONTACT_PATTERN.test(data.contactNumber)) errors.contactNumber = 'Enter a valid mobile number, e.g. 09123456789.';
+=======
+    firstName:    validateName(data.firstName, 'First name'),
+    lastName:     validateName(data.lastName, 'Last name'),
+    email:        null,
+    contactNumber: null,
+    password:     validatePassword(data.password),
+    confirmPassword: null,
+  };
 
-  if (!errors.password && data.password !== data.confirmPassword) {
+  if (!data.email) {
+    errors.email = 'Email address is required.';
+  } else if (data.email.length > 100 || !EMAIL_PATTERN.test(data.email)) {
+    errors.email = 'Enter a valid email address.';
+  }
+
+  if (!data.contactNumber) {
+    errors.contactNumber = 'Contact number is required.';
+  } else if (!CONTACT_PATTERN.test(data.contactNumber)) {
+    errors.contactNumber = 'Enter a valid mobile number, e.g. 09123456789.';
+  }
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3
+
+   if (!errors.password && data.password !== data.confirmPassword) {
     errors.confirmPassword = 'Passwords do not match. Please re-enter your password.';
   }
 
@@ -65,7 +98,16 @@ function validateRegistration(data) {
 }
 
 function toPublicProfile(customer) {
+<<<<<<< HEAD
   return { id: customer.id, firstName: customer.firstName, lastName: customer.lastName, email: customer.email };
+=======
+  return {
+    id:        customer.id,
+    firstName: customer.firstName,
+    lastName:  customer.lastName,
+    email:     customer.email,
+  };
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3
 }
 
 const emailTakenError = () => new AppError('This email is already registered.', 409, { email: 'This email is already registered.' });
@@ -73,9 +115,20 @@ const emailTakenError = () => new AppError('This email is already registered.', 
 async function registerCustomer(body) {
   const data = normalizeRegistration(body);
   const errors = validateRegistration(data);
+<<<<<<< HEAD
   if (Object.keys(errors).length > 0) throw new AppError('Please fix the highlighted fields.', 400, errors);
   if (await customerModel.findByEmail(data.email)) throw emailTakenError();
   const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
+=======
+  if (Object.keys(errors).length > 0) {
+    throw new AppError('Please fix the highlighted fields.', 400, errors);
+  }
+
+    if (await customerModel.findByEmail(data.email)) throw emailTakenError();
+
+    const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
+
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3
   try {
     const id = await customerModel.create({ ...data, passwordHash });
     return toPublicProfile({ ...data, id });
@@ -85,6 +138,7 @@ async function registerCustomer(body) {
   }
 }
 
+<<<<<<< HEAD
 async function authenticateCustomer(body = {}) {
   const email    = asText(body.email).trim().toLowerCase();
   const password = asText(body.password);
@@ -102,3 +156,6 @@ async function authenticateCustomer(body = {}) {
 }
 
 module.exports = { LOGIN_PAGE, CUSTOMER_HOME, registerCustomer, authenticateCustomer };
+=======
+module.exports = { LOGIN_PAGE, registerCustomer };
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3

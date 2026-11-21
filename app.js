@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'frontend')));
 
+HEAD
 app.get('/', (req, res) => res.redirect('/customer/html/register.html'));
 app.get('/admin', (req, res) => res.redirect('/admin/html/dashboard.html'));
 

@@ -1,3 +1,9 @@
+/**
+ * 1.1.1 Allow customers to register an account
+ * Frontend: Build a registration form with the required fields, input validation,
+ * and password confirmation, and redirect to login after a successful registration.
+ */
+
 import { postJson } from './api.js';
 import {
   clearErrorOnInput,
@@ -12,6 +18,7 @@ const form = document.getElementById('registerForm');
 const formError = document.getElementById('formError');
 const submitButton = form.querySelector('[type="submit"]');
 
+// 1.1.1 Required field error messages shown when a field is left blank
 const REQUIRED_MESSAGES = {
   firstName: 'First name is required.',
   lastName: 'Last name is required.',
@@ -21,6 +28,7 @@ const REQUIRED_MESSAGES = {
   confirmPassword: 'Please confirm your password.',
 };
 
+// 1.1.1 Client-side validation — checks blank fields and mismatched passwords
 function findLocalErrors(values) {
   const errors = {};
 
@@ -35,6 +43,7 @@ function findLocalErrors(values) {
   return errors;
 }
 
+// 1.1.1 Submit the registration form and redirect to login on success
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   clearFormErrors(form, formError);
@@ -60,4 +69,5 @@ form.addEventListener('submit', async (event) => {
   setSubmitting(submitButton, false);
 });
 
+// 1.1.1 Clear field errors as the customer types corrections
 clearErrorOnInput(form);

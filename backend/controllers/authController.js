@@ -1,6 +1,7 @@
 const authService = require('../services/authService');
 const sendError   = require('./errorResponse');
 
+<<<<<<< HEAD
 const SESSION_COOKIE = 'brb.sid';
 
 function startSession(req, customer) {
@@ -17,11 +18,21 @@ async function register(req, res, next) {
   try {
     await authService.registerCustomer(req.body);
     res.status(201).json({ message: 'Account created successfully.', redirectTo: `${authService.LOGIN_PAGE}?registered=1` });
+=======
+async function register(req, res, next) {
+  try {
+    await authService.registerCustomer(req.body);
+    res.status(201).json({
+      message: 'Account created successfully.',
+      redirectTo: `${authService.LOGIN_PAGE}?registered=1`,
+    });
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3
   } catch (error) {
     sendError(error, res, next);
   }
 }
 
+<<<<<<< HEAD
 async function login(req, res, next) {
   try {
     const customer = await authService.authenticateCustomer(req.body);
@@ -46,3 +57,6 @@ function getCurrentCustomer(req, res) {
 }
 
 module.exports = { register, login, logout, getCurrentCustomer };
+=======
+module.exports = { register };
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3

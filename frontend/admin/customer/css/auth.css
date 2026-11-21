@@ -50,7 +50,11 @@
   position: relative;
 }
 
+<<<<<<< HEAD:frontend/customer/css/auth.css
 /* Hide the browser's built-in password-reveal eye button (Edge / Chrome) */
+=======
+
+>>>>>>> 70d365e65dc1c3cf6b3f2ee8997eab8c1d5d60c3:frontend/admin/customer/css/auth.css
 .password-input .form-field__input::-ms-reveal,
 .password-input .form-field__input::-ms-clear {
   display: none;
