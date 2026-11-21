@@ -6,22 +6,23 @@ function getFieldParts(input) {
   return { field, message: field.querySelector('.form-field__error') };
 }
 
+
 export function setFieldError(input, text) {
   const { field, message } = getFieldParts(input);
-
   field.classList.add('form-field--invalid');
   input.setAttribute('aria-invalid', 'true');
   message.textContent = text;
   message.hidden = false;
 }
 
+
 export function clearFieldError(input) {
   const { field, message } = getFieldParts(input);
-
   field.classList.remove('form-field--invalid');
   input.removeAttribute('aria-invalid');
   message.hidden = true;
 }
+
 
 export function clearFormErrors(form, alertElement) {
   [...form.elements].filter((el) => el.matches('.form-field__input')).forEach(clearFieldError);
@@ -69,7 +70,6 @@ export function bindPasswordToggles() {
 
     toggle.addEventListener('click', () => {
       const isHidden = input.type === 'password';
-
       input.type = isHidden ? 'text' : 'password';
       toggle.classList.toggle('is-visible', isHidden);
       toggle.setAttribute('aria-pressed', String(isHidden));

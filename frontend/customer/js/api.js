@@ -1,6 +1,19 @@
+
 export async function postJson(url, payload) {
   const response = await fetch(url, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  return { ok: response.ok, status: response.status, data };
+}
+
+export async function putJson(url, payload) {
+  const response = await fetch(url, {
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
@@ -16,3 +29,4 @@ export async function getJson(url) {
 
   return { ok: response.ok, status: response.status, data };
 }
+S

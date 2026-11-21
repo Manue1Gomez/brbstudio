@@ -50,6 +50,12 @@
   position: relative;
 }
 
+/* Hide the browser's built-in password-reveal eye button (Edge / Chrome) */
+.password-input .form-field__input::-ms-reveal,
+.password-input .form-field__input::-ms-clear {
+  display: none;
+}
+
 .password-input .form-field__input {
   padding-right: 2.6rem;
 }
