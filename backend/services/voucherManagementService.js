@@ -100,4 +100,11 @@ async function createVoucher(body) {
   }
 }
 
+async function deleteVoucher(rawId) {
+  const id = parseId(rawId);
+  if (!(await voucherModel.findById(id))) throw notFoundError();
+
+  await voucherModel.remove(id);
+}
+
 module.exports = { createVoucher };

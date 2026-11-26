@@ -138,3 +138,39 @@ async function handleVoucherSubmit(event) {
     elements.voucherSubmit.disabled = false;
   }
 }
+
+function openDeleteDialog(voucher) {
+  voucherToDelete = voucher;
+
+  elements.deleteMessage.textContent =
+    `"${voucher.code}" will be permanently removed. Bookings that already used it keep their discount, ` +
+    'but customers will no longer be able to enter this code.';
+  elements.deleteError.hidden = true;
+  elements.confirmDelete.disabled = false;
+
+  elements.deleteDialog.showModal();
+}
+
+elements.addButton.addEventListener('click', () => openVoucherDialog());
+elements.searchInput.addEventListener('input', renderVouchers);
+
+elements.grid.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-action]');
+  if (!button) return;
+
+  const voucher = findVoucher(button.closest('.voucher-card').dataset.id);
+
+  if (button.dataset.action === 'edit') openVoucherDialog(voucher);
+  if (button.dataset.action === 'remove') openDeleteDialog(voucher);
+});
+
+elements.voucherForm.addEventListener('submit', handleVoucherSubmit);
+elements.voucherForm.elements.discountType.addEventListener('change', updateDiscountPrefix);
+elements.confirmDelete.addEventListener('click', handleConfirmDelete);
+
+clearFieldOnInput(elements.voucherForm);
+enableDialogDismiss();
+loadVouchers();
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) loadVouchers();
+});
