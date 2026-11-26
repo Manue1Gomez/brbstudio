@@ -58,6 +58,16 @@ function listMonths(from, to) {
   return months;
 }
 
+function toAmounts(row) {
+  const valueCents = toCents(row.bookingValue);
+  const receivedCents = toCents(row.received);
+
+  return {
+    bookingValue: fromCents(valueCents),
+    received: fromCents(receivedCents),
+    outstanding: fromCents(valueCents - receivedCents),
+  };
+}
 
 function toMonthlyIncome(months, rows) {
   const incomeByMonth = new Map(rows.map((row) => [row.month, toCents(row.income)]));
