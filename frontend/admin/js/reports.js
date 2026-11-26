@@ -42,6 +42,13 @@ const longMonthFormat = new Intl.DateTimeFormat('en-US', { month: 'long', year: 
 let services = [];
 let latestRequest = 0;
 
+const toMonthKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+const fromMonthKey = (key) => {
+  const [year, month] = key.split('-').map(Number);
+  return new Date(year, month - 1, 1);
+};
+
 function readFilters() {
   const params = new URLSearchParams(window.location.search);
   const today = new Date();
@@ -68,6 +75,59 @@ function toQuery({ from, to, serviceId }) {
   return params.toString();
 }
 
+function formatChartAmount(amount) {
+  if (amount < 10000) return formatPeso(amount);
+
+  const thousands = amount / 1000;
+  return `₱${thousands.toLocaleString('en-PH', { maximumFractionDigits: 1 })}K`;
+}
+
+function showError(message) {
+  elements.error.textContent = message;
+  elements.error.hidden = false;
+}
+
+function updateMenu(filters) {
+  const query = (serviceId) => toQuery({ ...filters, serviceId });
+
+  elements.menu.querySelectorAll('.nav-submenu__link').forEach((link) => {
+    const serviceId = link.dataset.serviceId;
+
+    link.href = `${PAGE_URL}?${query(serviceId)}`;
+    link.classList.toggle('nav-submenu__link--active', serviceId === filters.serviceId);
+    if (serviceId === filters.serviceId) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+}
+
+function createMenuItem(service) {
+  const item = elements.menuTemplate.content.firstElementChild.cloneNode(true);
+  const link = item.querySelector('.nav-submenu__link');
+
+  link.dataset.serviceId = service.id;
+  link.textContent = service.name;
+
+  return item;
+}
+
+function createServiceOption(service) {
+  const option = document.createElement('option');
+  option.value = service.id;
+  option.textContent = service.name;
+  return option;
+}
+
+async function loadServices() {
+  try {
+    services = await getJson(SERVICES_API);
+  } catch (error) {
+    console.error('Could not load services:', error);
+    services = [];
+  }
+
+  elements.serviceSelect.append(...services.map(createServiceOption));
+  elements.menu.append(...services.map(createMenuItem));
+}
 
 function renderSummary({ summary }) {
   elements.stats.forEach((element) => {
@@ -92,7 +152,6 @@ function createIncomeBar({ month, income }, highest, currentMonth, showYear) {
   return bar;
 }
 
-
 function renderIncome({ monthlyIncome }) {
   const highest = Math.max(...monthlyIncome.map((entry) => entry.income), 1);
   const currentMonth = toMonthKey(new Date());
@@ -105,6 +164,77 @@ function renderIncome({ monthlyIncome }) {
 
   elements.incomeStatus.textContent = 'No payments received in this period.';
   elements.incomeStatus.hidden = hasIncome;
+}
+
+function createServiceRow(service, filters) {
+  const row = elements.serviceTemplate.content.firstElementChild.cloneNode(true);
+  const link = row.querySelector('.report-table__link');
+
+  link.textContent = service.name;
+  link.href = `${PAGE_URL}?${toQuery({ ...filters, serviceId: service.id })}`;
+
+  row.querySelector('[data-field="bookings"]').textContent = service.bookings;
+  row.querySelector('[data-field="bookingValue"]').textContent = formatPeso(service.bookingValue);
+  row.querySelector('[data-field="received"]').textContent = formatPeso(service.received);
+  row.querySelector('[data-field="outstanding"]').textContent = formatPeso(service.outstanding);
+
+  return row;
+}
+
+function renderServices({ summary, services: rows }, filters) {
+  elements.serviceBody.replaceChildren(...rows.map((service) => createServiceRow(service, filters)));
+
+  elements.serviceTotals.forEach((cell) => {
+    const value = summary[cell.dataset.total];
+    cell.textContent = cell.dataset.total === 'bookings' ? value : formatPeso(value);
+  });
+}
+
+function createBookingRow(booking) {
+  const row = elements.bookingTemplate.content.firstElementChild.cloneNode(true);
+  const field = (name) => row.querySelector(`[data-field="${name}"]`);
+  const status = field('status');
+
+  field('reference').textContent = `#${booking.reference}`;
+  field('clientName').textContent = booking.clientName;
+  field('eventDate').textContent = formatDate(booking.eventDate);
+  field('bookingValue').textContent = formatPeso(booking.bookingValue);
+  field('received').textContent = formatPeso(booking.received);
+  field('outstanding').textContent = formatPeso(booking.outstanding);
+
+  status.textContent = booking.status;
+  status.classList.add(`pill--${statusSlug(booking.status)}`);
+
+  return row;
+}
+
+function renderBookings({ bookings }) {
+  const isEmpty = bookings.length === 0;
+
+  elements.bookingBody.replaceChildren(...bookings.map(createBookingRow));
+  elements.bookingWrap.hidden = isEmpty;
+  elements.bookingStatus.textContent = 'No bookings found for this period.';
+  elements.bookingStatus.hidden = !isEmpty;
+}
+
+function renderReport(report, filters) {
+  const isService = report.service !== null;
+
+  elements.title.textContent = isService ? report.service.name : 'Overview';
+  document.title = `${isService ? report.service.name : 'Reports'} | BRB Studios Admin`;
+
+  elements.grid.classList.toggle('report-grid--service', isService);
+  elements.serviceSection.hidden = isService;
+  elements.bookingSection.hidden = !isService;
+
+  renderSummary(report);
+  renderIncome(report);
+
+  if (isService) renderBookings(report);
+  else renderServices(report, filters);
+
+  elements.status.hidden = true;
+  elements.content.hidden = false;
 }
 
 async function loadReport() {
