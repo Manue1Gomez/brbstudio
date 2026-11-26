@@ -29,15 +29,7 @@ async function findById(id, executor = pool) {
   return row || null;
 }
  
-async function create({ code, name, discountType, discountValue, startDate, endDate, usageLimit }) {
-  const [result] = await pool.query(
-    `INSERT INTO voucher
-       (voucher_code, voucher_name, discount_type, discount_value, start_date, end_date, usage_limit)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [code, name, discountType, discountValue, startDate, endDate, usageLimit]
-  );
-  return result.insertId;
-}
+
 
 async function create({ code, name, discountType, discountValue, startDate, endDate, usageLimit }) {
   const [result] = await pool.query(
@@ -57,6 +49,9 @@ async function incrementUsedCount(executor, id) {
   return result.affectedRows === 1;
 }
 
+async function remove(id) {
+  await pool.query('DELETE FROM voucher WHERE voucher_id = ?', [id]);
+}
 
 module.exports = {
   findAll,
