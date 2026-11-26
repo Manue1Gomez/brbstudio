@@ -11,6 +11,17 @@ const asText = (value) => String(value ?? '').trim();
 
 const toMonthKey = (year, monthIndex) => `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
 
+const monthNumber = (key) => {
+  const [year, month] = key.split('-').map(Number);
+  return year * 12 + month - 1;
+};
+
+function defaultRange() {
+  const today = new Date();
+
+  return { from: toMonthKey(today.getFullYear(), 0), to: toMonthKey(today.getFullYear(), today.getMonth()) };
+}
+
 function readQuery(query) {
   const defaults = defaultRange();
   const from = asText(query.from) || defaults.from;
