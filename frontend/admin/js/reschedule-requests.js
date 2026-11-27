@@ -4,6 +4,21 @@ import { enableDialogDismiss, showToast } from './ui.js';
 
 const API_BASE = '/api/admin/reschedule';
 
+const DECISIONS = {
+  approve: {
+    title: 'Approve this request?',
+    confirmLabel: 'Approve',
+    confirmClass: 'btn--primary',
+    successMessage: 'Request approved. The booking now uses the new schedule.',
+  },
+  reject: {
+    title: 'Reject this request?',
+    confirmLabel: 'Reject',
+    confirmClass: 'btn--danger-solid',
+    successMessage: 'Request rejected. The booking keeps its original schedule.',
+  },
+};
+
 const elements = {
   status: document.getElementById('pageStatus'),
   list: document.getElementById('requestList'),
@@ -60,6 +75,56 @@ async function loadRequests() {
     elements.status.textContent = error.message;
   }
 }
+
+function openConfirmDialog(request, action) {
+  const decision = DECISIONS[action];
+
+  pendingDecision = { request, action };
+
+  elements.confirmTitle.textContent = decision.title;
+  elements.confirmMessage.textContent =
+    `${request.customerName}'s booking #${request.reference} ` +
+    (action === 'approve'
+      ? `will move to ${formatDate(request.newDate)}, ${request.newTimeLabel}.`
+      : `will stay on ${formatDate(request.oldDate)}, ${request.oldTimeLabel}.`);
+
+  elements.confirmError.hidden = true;
+  elements.confirmButton.className = `btn ${decision.confirmClass}`;
+  elements.confirmButton.textContent = decision.confirmLabel;
+  elements.confirmButton.disabled = false;
+
+  elements.confirmDialog.showModal();
+}
+
+async function handleConfirm() {
+  const { request, action } = pendingDecision;
+
+  elements.confirmButton.disabled = true;
+  elements.confirmError.hidden = true;
+
+  try {
+    await sendJson(`${API_BASE}/${request.id}/${action}`, 'POST', {});
+
+    requests = requests.filter((item) => item.id !== request.id);
+    renderRequests();
+
+    elements.confirmDialog.close();
+    showToast(DECISIONS[action].successMessage);
+  } catch (error) {
+    elements.confirmError.textContent = error.message;
+    elements.confirmError.hidden = false;
+    elements.confirmButton.disabled = false;
+  }
+}
+
+elements.list.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-action]');
+  if (!button) return;
+
+  openConfirmDialog(findRequest(button.closest('.request-card').dataset.id), button.dataset.action);
+});
+
+elements.confirmButton.addEventListener('click', handleConfirm);
 
 enableDialogDismiss();
 loadRequests();
