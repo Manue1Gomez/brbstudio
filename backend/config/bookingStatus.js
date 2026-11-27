@@ -6,6 +6,12 @@ const BOOKING_STATUS = Object.freeze({
   REJECTED: 'Rejected',
 });
 
+const RESCHEDULE_STATUS = Object.freeze({
+  PENDING: 'Pending',
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected',
+});
+
 const UPCOMING_STATUSES = [BOOKING_STATUS.TO_PAY, BOOKING_STATUS.CONFIRMED];
 
 const DAY_SCHEDULE_STATUSES = [
@@ -29,6 +35,7 @@ const CALENDAR_STATUSES = [
 
 module.exports = {
   BOOKING_STATUS,
+  RESCHEDULE_STATUS,
   UPCOMING_STATUSES,
   DAY_SCHEDULE_STATUSES,
   COLLECTIBLE_STATUSES,

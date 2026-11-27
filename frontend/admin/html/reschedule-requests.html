@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rescheduling Requests | BRB Studios Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/reschedule-requests.css">
+</head>
+<body class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img class="sidebar__logo" src="../AdminImages/brb-logo.png" alt="BRB Studios">
+      <p class="sidebar__role">Administrator</p>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Admin navigation">
+      <ul class="nav-list">
+        <li><a class="nav-link" href="dashboard.html"><span class="nav-link__icon nav-link__icon--dashboard" aria-hidden="true"></span>Dashboard</a></li>
+        <li><a class="nav-link" href="payments.html"><span class="nav-link__icon nav-link__icon--payments" aria-hidden="true"></span>Payments</a></li>
+        <li><a class="nav-link" href="bookings.html"><span class="nav-link__icon nav-link__icon--bookings" aria-hidden="true"></span>Bookings</a></li>
+        <li><a class="nav-link" href="calendar.html"><span class="nav-link__icon nav-link__icon--calendar" aria-hidden="true"></span>Calendar</a></li>
+        <li><a class="nav-link" href="services.html"><span class="nav-link__icon nav-link__icon--services" aria-hidden="true"></span>Services</a></li>
+        <li><a class="nav-link" href="clients.html"><span class="nav-link__icon nav-link__icon--clients" aria-hidden="true"></span>Clients</a></li>
+        <li><a class="nav-link" href="vouchers.html"><span class="nav-link__icon nav-link__icon--vouchers" aria-hidden="true"></span>Vouchers</a></li>
+        <li><a class="nav-link nav-link--active" href="reschedule-requests.html" aria-current="page"><span class="nav-link__icon nav-link__icon--reschedule" aria-hidden="true"></span>Rescheduling Requests</a></li>
+        <li><a class="nav-link" href="reports.html"><span class="nav-link__icon nav-link__icon--reports" aria-hidden="true"></span>Reports</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a class="sidebar__new-booking" href="new-booking.html">New Booking</a>
+      <button class="sidebar__logout" type="button" data-logout>
+        <span class="sidebar__logout-icon" aria-hidden="true"></span>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="page-header">
+      <p class="page-header__eyebrow">Schedule Changes</p>
+      <h1 class="page-header__title">Rescheduling Requests</h1>
+    </header>
+
+    <p class="status-message" id="pageStatus" role="status">Loading requests&hellip;</p>
+
+    <section class="request-list" id="requestList" aria-label="Pending rescheduling requests" hidden></section>
+
+    <p class="request-empty" id="emptyStatus" role="status" hidden>
+      No pending rescheduling requests. New requests from customers will appear here.
+    </p>
+  </main>
+
+  <dialog class="dialog" id="confirmDialog" aria-labelledby="confirmDialogTitle">
+    <div class="dialog__form">
+      <h2 class="dialog__title" id="confirmDialogTitle"></h2>
+      <p class="dialog__text" id="confirmMessage"></p>
+      <p class="alert alert--error" id="confirmError" role="alert" hidden></p>
+
+      <div class="dialog__actions">
+        <button class="btn" type="button" data-dialog-close>Cancel</button>
+        <button class="btn" type="button" id="confirmButton"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <template id="requestCardTemplate">
+    <article class="panel request-card">
+      <header class="request-card__header">
+        <h2 class="request-card__reference"></h2>
+        <p class="request-card__requested"></p>
+      </header>
+
+      <p class="request-card__summary"></p>
+
+      <div class="request-card__schedules">
+        <div class="schedule-box">
+          <p class="schedule-box__label">Original</p>
+          <p class="schedule-box__date" data-field="oldDate"></p>
+          <p class="schedule-box__time" data-field="oldTime"></p>
+        </div>
+
+        <span class="request-card__arrow" aria-hidden="true"></span>
+
+        <div class="schedule-box schedule-box--requested">
+          <p class="schedule-box__label">Requested</p>
+          <p class="schedule-box__date" data-field="newDate"></p>
+          <p class="schedule-box__time" data-field="newTime"></p>
+        </div>
+      </div>
+
+      <div class="request-card__actions">
+        <button class="btn btn--primary" type="button" data-action="approve">Approve</button>
+        <button class="btn" type="button" data-action="reject">Reject</button>
+      </div>
+    </article>
+  </template>
+
+  <script type="module" src="../js/admin-session.js"></script>
+  <script type="module" src="../js/reschedule-requests.js"></script>
+</body>
+</html>

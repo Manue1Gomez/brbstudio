@@ -8,14 +8,17 @@ const dashboardRoutes = require('./backend/routes/dashboardRoutes');
 const serviceRoutes = require('./backend/routes/serviceRoutes');
 const adminServiceRoutes = require('./backend/routes/adminServiceRoutes');
 const customerModel = require('./backend/models/customerModel');
+const voucherModel = require('./backend/models/voucherModel');
+const rescheduleModel = require('./backend/models/rescheduleModel');
 const authRoutes = require('./backend/routes/authRoutes');
 const calendarRoutes = require('./backend/routes/calendarRoutes');
 const adminCalendarRoutes = require('./backend/routes/adminCalendarRoutes');
+const adminReportRoutes = require('./backend/routes/adminReportRoutes');
+const adminVoucherRoutes = require('./backend/routes/adminVoucherRoutes');
 const sessionMiddleware = require('./backend/config/session');
 const customerRoutes = require('./backend/routes/customerRoutes');
 const serviceModel = require('./backend/models/serviceModel');
-
-
+const adminRescheduleRoutes = require('./backend/routes/adminRescheduleRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,6 +42,9 @@ app.use('/api/calendar', calendarRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/services', adminServiceRoutes);
 app.use('/api/admin/calendar', adminCalendarRoutes);
+app.use('/api/admin/reports', adminReportRoutes);
+app.use('/api/admin/vouchers', adminVoucherRoutes);
+app.use('/api/admin/reschedule', adminRescheduleRoutes);
 app.use('/api/customer', customerRoutes);
 app.use('/api/services', serviceRoutes);
 

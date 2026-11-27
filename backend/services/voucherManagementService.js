@@ -1,4 +1,4 @@
- const voucherModel = require('../models/voucherModel');
+const voucherModel = require('../models/voucherModel');
 const AppError = require('./appError');
 const { withTransaction } = require('../config/db');
 const { isValidIsoDate } = require('./timeHelper');
@@ -12,23 +12,25 @@ const CODE_PATTERN = /^[A-Z0-9]{3,30}$/;
 const VALUE_PATTERN = /^\d{1,8}(\.\d{1,2})?$/;
 const LIMIT_PATTERN = /^\d{1,4}$/;
 const REQUIRED_MESSAGE = 'This field is required.';
- 
- const codeTakenError = () =>
-    new AppError('A voucher with this code already exists.', 409, {
-      code: 'A voucher with this code already exists.',
-    });
 
-async function createVoucher(body) {
-  const fields = normalizeFields(body);
-  validateFields(fields);
+const codeTakenError = () =>
+  new AppError('A voucher with this code already exists.', 409, {
+    code: 'A voucher with this code already exists.',
+  });
 
-  try {
-    const id = await voucherModel.create(fields);
-    return toPublicVoucher(await voucherModel.findById(id));
-  } catch (error) {
-    if (error.code === MYSQL_DUPLICATE_ENTRY) throw codeTakenError();
-    throw error;
-  }
+const codeInUseError = () =>
+  new AppError("This voucher was already used in bookings, so its code can't be changed.", 409, {
+    code: "This voucher was already used in bookings, so its code can't be changed.",
+  });
+
+const notFoundError = () => new AppError('Voucher not found.', 404);
+
+const asText = (value) => String(value ?? '');
+
+function parseId(value) {
+  const id = Number(value);
+  if (!Number.isInteger(id) || id < 1) throw notFoundError();
+  return id;
 }
 
 function normalizeFields(body = {}) {
@@ -41,7 +43,8 @@ function normalizeFields(body = {}) {
     endDate: asText(body.endDate).trim(),
     usageLimit: asText(body.usageLimit).trim(),
   };
-} 
+}
+
 function validateFields(fields) {
   const errors = {};
 
@@ -85,7 +88,25 @@ function validateFields(fields) {
   }
 }
 
+function toPublicVoucher(row) {
+  return {
+    id: row.id,
+    code: row.code,
+    name: row.name,
+    discountType: row.discountType,
+    discountValue: Number(row.discountValue),
+    startDate: row.startDate,
+    endDate: row.endDate,
+    usageLimit: getSafeCount(row.usageLimit),
+    usedCount: getSafeCount(row.usedCount),
+    remainingUses: getRemainingUses(row.usageLimit, row.usedCount),
+    expired: Boolean(row.expired),
+  };
+}
 
+async function listVouchers() {
+  return (await voucherModel.findAll()).map(toPublicVoucher);
+}
 
 async function createVoucher(body) {
   const fields = normalizeFields(body);
@@ -100,11 +121,36 @@ async function createVoucher(body) {
   }
 }
 
-async function deleteVoucher(rawId) {
+async function updateVoucher(rawId, body) {
   const id = parseId(rawId);
-  if (!(await voucherModel.findById(id))) throw notFoundError();
+  const fields = normalizeFields(body);
+  validateFields(fields);
 
-  await voucherModel.remove(id);
+  try {
+    return await withTransaction(async (connection) => {
+      const existing = await voucherModel.lockById(connection, id);
+      if (!existing) throw notFoundError();
+
+      const usedCount = Number(existing.usedCount);
+      if (
+        fields.code !== existing.code &&
+        (usedCount > 0 || (await voucherModel.countBookingReferences(existing.code, connection)) > 0)
+      ) {
+        throw codeInUseError();
+      }
+      if (!canSetUsageLimit(fields.usageLimit, usedCount)) {
+        throw new AppError('Usage limit cannot be lower than the number of times this voucher was used.', 400, {
+          usageLimit: 'Usage limit cannot be lower than the number of times this voucher was used.',
+        });
+      }
+
+      await voucherModel.update(id, fields, connection);
+      return toPublicVoucher(await voucherModel.findById(id, connection));
+    });
+  } catch (error) {
+    if (error.code === MYSQL_DUPLICATE_ENTRY) throw codeTakenError();
+    throw error;
+  }
 }
 
-module.exports = { createVoucher };
+module.exports = { listVouchers, createVoucher, updateVoucher };
