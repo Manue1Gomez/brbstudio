@@ -21,8 +21,10 @@ if (new URLSearchParams(window.location.search).get('registered') === '1') {
 
 function findLocalErrors({ email, password }) {
   const errors = {};
+
   if (!email.trim()) errors.email = 'Email address is required.';
   if (!password) errors.password = 'Password is required.';
+
   return errors;
 }
 
