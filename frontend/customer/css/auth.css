@@ -50,7 +50,7 @@
   position: relative;
 }
 
-
+/* Hide the browser's built-in password-reveal eye button (Edge / Chrome) */
 .password-input .form-field__input::-ms-reveal,
 .password-input .form-field__input::-ms-clear {
   display: none;
@@ -136,4 +136,10 @@
   color: #1f5a1c;
   background: #e8f6e6;
   border-color: #b8e0b2;
+}
+
+.form-alert--pending {
+  color: #5b4b10;
+  background: #fff8df;
+  border-color: #e8d28a;
 }

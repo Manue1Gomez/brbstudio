@@ -1,0 +1,74 @@
+.settings {
+  width: 100%;
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+.settings__display-name {
+  margin-bottom: 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+  font-weight: 400;
+  text-align: center;
+  color: var(--color-ink-soft);
+}
+
+.settings__alert {
+  margin-bottom: 1.1rem;
+}
+
+.settings__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.settings__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.settings__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+/* ── Change password section ─────────────────────────────────────── */
+
+.change-password {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #fafafa;
+  border: 1.5px solid #d1d1d6;
+  border-radius: var(--radius-md);
+}
+
+.change-password__title {
+  margin-bottom: 1.1rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--color-ink-soft);
+}
+
+.change-password__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.change-password__row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 44rem) {
+  .settings__row {
+    grid-template-columns: 1fr;
+  }
+
+  .change-password__row {
+    grid-template-columns: 1fr;
+  }
+}

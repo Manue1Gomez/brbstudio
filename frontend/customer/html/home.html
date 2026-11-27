@@ -31,13 +31,13 @@
 
       <div class="site-header__account" id="guestLinks">
         <a class="site-header__link" href="login.html">Login</a>
-        <a class="site-header__button site-header__button--dark" href="register.html">Register</a>
-        <a class="site-header__button" href="login.html" data-book-link>Book</a>
+        <a class="site-header__link site-header__link--accent" href="register.html">Register</a>
       </div>
 
       <div class="site-header__account" id="memberLinks" hidden>
         <a class="site-header__link site-header__link--accent" href="book-service.html">My Profile</a>
-        <a class="site-header__button" href="login.html" data-book-link>Book</a>
+        <button class="site-header__button site-header__button--dark" id="siteHeaderLogoutButton" type="button">Logout</button>
+        <span class="site-header__logout-status" id="siteHeaderLogoutStatus" role="status" aria-live="polite" hidden></span>
       </div>
     </div>
   </header>
@@ -58,20 +58,10 @@
         </div>
       </div>
 
-      <div class="hero__gallery" role="img" aria-label="BRB Studios storefront">
-        <img class="hero__photo" src="../CustomerImages/storefront-left.jpg" alt="">
-        <img class="hero__photo" src="../CustomerImages/storefront-center.jpg" alt="">
-        <img class="hero__photo" src="../CustomerImages/storefront-right.jpg" alt="">
-      </div>
-    </section>
-
-    <section class="section" id="services">
-      <div class="section__inner">
-        <p class="section__eyebrow">What we offer</p>
-        <h2 class="section__title">Our Services</h2>
-
-        <p class="services__status" id="serviceStatus" role="status">Loading services...</p>
-        <ul class="services__grid" id="serviceList"></ul>
+      <div class="hero__gallery" role="img" aria-label="Makeup, photography, and modeling">
+        <img class="hero__photo" src="../CustomerImages/home-makeup.png" alt="">
+        <img class="hero__photo" src="../CustomerImages/home-photography.jpg" alt="">
+        <img class="hero__photo" src="../CustomerImages/home-modeling.jpg" alt="">
       </div>
     </section>
 

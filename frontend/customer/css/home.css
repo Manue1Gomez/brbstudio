@@ -346,13 +346,13 @@ html {
 }
 
 .contact__value a {
-  color: var(--color-brand-dark);
+  color: #000;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .contact__value a:hover {
-  color: var(--color-brand);
+  color: #000;
 }
 
 @media (max-width: 64rem) {

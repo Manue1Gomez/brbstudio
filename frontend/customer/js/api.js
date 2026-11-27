@@ -1,9 +1,3 @@
-/**
- * Shared HTTP helpers used by login and register.
- * Not part of a specific WBS breakdown item — this is a utility
- * that supports 1.1.1 and 1.1.2 by handling all API calls to the backend.
- */
-
 export async function postJson(url, payload) {
   const response = await fetch(url, {
     method: 'POST',
