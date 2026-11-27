@@ -19,6 +19,7 @@ const sessionMiddleware = require('./backend/config/session');
 const customerRoutes = require('./backend/routes/customerRoutes');
 const serviceModel = require('./backend/models/serviceModel');
 const adminRescheduleRoutes = require('./backend/routes/adminRescheduleRoutes');
+const customerBookingRoutes = require('./backend/routes/customerBookingRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -47,6 +48,7 @@ app.use('/api/admin/vouchers', adminVoucherRoutes);
 app.use('/api/admin/reschedule', adminRescheduleRoutes);
 app.use('/api/customer', customerRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/bookings', customerBookingRoutes);
 
 
 app.use('/api', (req, res) => {
