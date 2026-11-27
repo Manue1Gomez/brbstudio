@@ -3,7 +3,8 @@ const calendarController = require('../controllers/calendarController');
 
 const router = express.Router();
 
+router.get('/month', calendarController.getMonthOverview);
 router.get('/blocked-dates', calendarController.getBlockedDatesInMonth);
-router.get('/day', calendarController.getPublicDayAvailability);
+router.get('/availability', calendarController.getPublicDayAvailability);
 
 module.exports = router;
