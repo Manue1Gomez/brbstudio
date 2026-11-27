@@ -1,0 +1,109 @@
+.request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.request-card {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.request-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.request-card__reference {
+  font-size: 1.125rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.request-card__requested {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.request-card__summary {
+  margin-top: 0.15rem;
+  font-size: 1rem;
+}
+
+.request-card__schedules {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.9rem;
+}
+
+.schedule-box {
+  padding: 0.55rem 1rem 0.7rem;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-ink);
+  border-radius: var(--radius-md);
+}
+
+.schedule-box--requested {
+  background: var(--color-brand-tint);
+  border-color: var(--color-brand-dark);
+}
+
+.schedule-box__label {
+  font-size: 0.6875rem;
+  font-style: italic;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.schedule-box__date {
+  margin-top: 0.1rem;
+  font-size: 1rem;
+}
+
+.schedule-box__time {
+  font-size: 1rem;
+}
+
+.request-card__arrow {
+  width: 2.25rem;
+  height: 1.5rem;
+  background-color: var(--color-ink);
+  -webkit-mask: url('../AdminImages/icons/arrow-right.svg') center / contain no-repeat;
+  mask: url('../AdminImages/icons/arrow-right.svg') center / contain no-repeat;
+}
+
+.request-card__actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.request-card__actions .btn {
+  min-width: 5.5rem;
+}
+
+.request-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--color-muted);
+  border: 1.5px dashed var(--color-line-strong);
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 52rem) {
+  .request-card__schedules {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .request-card__arrow {
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+}

@@ -1,3 +1,5 @@
+const LOGIN_PAGE = '/customer/html/login.html';
+
 export class ApiError extends Error {
   constructor(message, status, fieldErrors = {}) {
     super(message);
@@ -14,6 +16,11 @@ async function request(url, options) {
     response = await fetch(url, options);
   } catch {
     throw new ApiError('Unable to reach the server. Please check your connection and try again.', 0);
+  }
+
+  if (response.status === 401) {
+    window.location.assign(LOGIN_PAGE);
+    throw new ApiError('Your session has ended. Please log in again.', 401);
   }
 
   const data = await response.json().catch(() => ({}));
