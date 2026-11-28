@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS booking (
   end_time         TIME          NOT NULL,
   event_address    VARCHAR(255)  NULL DEFAULT NULL,
   voucher_code     VARCHAR(30)   NULL DEFAULT NULL,
+  voucher_consumed TINYINT(1)    NOT NULL DEFAULT 0,
   subtotal         DECIMAL(10,2) NOT NULL,
   discount_amount  DECIMAL(10,2) NOT NULL DEFAULT 0,
   total_amount     DECIMAL(10,2) NOT NULL,
@@ -36,4 +37,21 @@ CREATE TABLE IF NOT EXISTS blocked_date (
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (blocked_id),
   UNIQUE KEY uq_blocked_on (blocked_on)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS blocked_time (
+  blocked_time_id INT       NOT NULL AUTO_INCREMENT,
+  event_date      DATE      NOT NULL,
+  start_time      TIME      NOT NULL,
+  end_time        TIME      NOT NULL,
+  created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (blocked_time_id),
+  UNIQUE KEY uq_blocked_time_start (event_date, start_time),
+  KEY idx_blocked_time_date (event_date),
+  CONSTRAINT chk_blocked_time_range CHECK (end_time > start_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS booking_date_lock (
+  event_date DATE NOT NULL,
+  PRIMARY KEY (event_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

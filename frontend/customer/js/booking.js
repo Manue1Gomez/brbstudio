@@ -406,8 +406,13 @@ function continueToSummary() {
 serviceOptions.addEventListener('change', ({ target }) => {
   const id = Number(target.value);
 
+    state.selectedIds.clear();
+
   if (target.checked) state.selectedIds.add(id);
-  else state.selectedIds.delete(id);
+
+  serviceOptions.querySelectorAll('.service-option__input').forEach((input) => {
+    if (input !== target) input.checked = false;
+  });
 
   updateServiceSelectionControls();
 });
